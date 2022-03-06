@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matching_reviewer/services/services.dart';
 import 'package:matching_reviewer/views/register/general_info_view.dart';
 import 'package:matching_reviewer/views/register/product_expertise_view.dart';
 
@@ -11,10 +12,14 @@ class RegisterView extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CircleAvatar(),
+            const CircleAvatar(),
             TextButton(
-              child: Text('Edit Photo'),
+              child: const Text('Edit Photo'),
               onPressed: () {},
+            ),
+            TextButton(
+              child: const Text('test add data'),
+              onPressed: () => QuestionnaireAPI().testAddData(),
             ),
             Row(
               children: const [

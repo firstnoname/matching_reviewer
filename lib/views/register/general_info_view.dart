@@ -8,7 +8,6 @@ class GeneralInfoView extends StatelessWidget {
     String dropdownSex = 'Female';
     String dropdownStudent = 'Student';
     return Container(
-      color: Colors.yellow,
       width: MediaQuery.of(context).size.width / 2,
       padding: EdgeInsets.symmetric(
           horizontal: MediaQuery.of(context).size.width * 0.05),
