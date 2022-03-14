@@ -1,22 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../blocs/blocs.dart';
-import '../models/user.dart' as AppModel;
 import 'services.dart';
 
 class Authentication {
-  final AppManagerBloc _AppManagerBloc;
+  final AppManagerBloc _appManagerBloc;
   static Authentication? _cache;
   final FirebaseAuth _firebaseAuth;
 
   User? get firebaseCurrentUser => _firebaseAuth.currentUser;
 
-  factory Authentication(AppManagerBloc AppManagerBloc) {
-    _cache ??= Authentication._(AppManagerBloc);
+  factory Authentication(AppManagerBloc appManagerBloc) {
+    _cache ??= Authentication._(appManagerBloc);
     return _cache!;
   }
 
-  Authentication._(this._AppManagerBloc)
+  Authentication._(this._appManagerBloc)
       : _firebaseAuth = FirebaseAuth.instance;
 
   Future<void> verifyPhoneNumber({
@@ -64,15 +63,15 @@ class Authentication {
   }
 
   checkCurrentUserProfile() async {
-    UserAPI().getUser(_firebaseAuth.currentUser!.uid).then((user) async {
-      // if (user == null) {
-      //   _AppManagerBloc.updateCurrentUserProfile(
-      //       AppModel.User.fromFirebaseUser(_firebaseAuth.currentUser!));
-      //   _AppManagerBloc.add(ICharmManagerEventShowUserPolicy());
-      // } else {
-      //   _AppManagerBloc.updateCurrentUserProfile(user);
-      //   _AppManagerBloc.add(ICharmManagerEventLoginSuccess());
-      // }
-    });
+    var user = await UserAPI().getUser(_firebaseAuth.currentUser!.uid);
+    if (user != null) {
+      // update user info in app.
+      _appManagerBloc.updateCurrentUserProfile(_firebaseAuth.currentUser, user);
+      _appManagerBloc.add(AppManagerEventLoginSucceed());
+      // _appManagerBloc.add(ICharmManagerEventShowUserPolicy());
+    } else {
+      // user register flow.
+      _appManagerBloc.add(AppManagerEventUserRegisterStart());
+    }
   }
 }

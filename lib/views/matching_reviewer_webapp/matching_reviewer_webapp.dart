@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:matching_reviewer/blocs/blocs.dart';
 import 'package:matching_reviewer/utilities/utilities.dart';
@@ -41,8 +40,8 @@ class MatchingReviewerWebApp extends StatelessWidget {
     Widget buildScreen;
     switch (isLoggedIn) {
       case true:
-        // buildScreen = const Index();
-        buildScreen = const RegisterView();
+        buildScreen = const Index();
+        // buildScreen = const RegisterView();
         break;
       default:
         buildScreen = SignInScreen(
