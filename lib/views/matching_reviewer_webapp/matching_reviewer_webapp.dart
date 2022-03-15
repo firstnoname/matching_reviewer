@@ -26,18 +26,52 @@ class MatchingReviewerWebApp extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (!snapshot.hasData) {
               _isLoggedIn = false;
+              // context.read<AppManagerBloc>().add();
             } else {
               _isLoggedIn = true;
+              // context.read<AppManagerBloc>().add();
             }
-            return _buildHome(_isLoggedIn);
+            // return _buildHome(_isLoggedIn);
+            return _buildLayout();
           },
         ),
       ),
     );
   }
 
+  Widget _buildLayout() {
+    return BlocBuilder<AppManagerBloc, AppManagerState>(
+      builder: ((context, state) {
+        Widget layout;
+        if (state is AppManagerStateUnauthenticate) {
+          layout = const RegisterView();
+        } else if (state is AppManagerStateLoginSuccess) {
+          layout = const Index();
+        } else {
+          layout = SignInScreen(
+            sideBuilder: (context, constraints) {
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Image.asset(
+                      'assets/images/login_view/login_side_icon.png'),
+                ),
+              );
+            },
+            providerConfigs: const [
+              PhoneProviderConfiguration(),
+            ],
+          );
+        }
+        return layout;
+      }),
+    );
+  }
+
   Widget _buildHome(bool isLoggedIn) {
     Widget buildScreen;
+
     switch (isLoggedIn) {
       case true:
         buildScreen = const Index();
