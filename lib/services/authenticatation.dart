@@ -8,6 +8,7 @@ class Authentication {
   static Authentication? _cache;
   final FirebaseAuth _firebaseAuth;
 
+  FirebaseAuth get firebaseAuth => _firebaseAuth;
   User? get firebaseCurrentUser => _firebaseAuth.currentUser;
 
   factory Authentication(AppManagerBloc appManagerBloc) {

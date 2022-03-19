@@ -12,29 +12,36 @@ class MatchingReviewerWebApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool _isLoggedIn = false;
-
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => AppManagerBloc()),
+        BlocProvider(create: (context) => AppManagerBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: appThemes(context),
-        home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (!snapshot.hasData) {
-              _isLoggedIn = false;
-              // context.read<AppManagerBloc>().add();
-            } else {
-              _isLoggedIn = true;
-              // context.read<AppManagerBloc>().add();
-            }
-            // return _buildHome(_isLoggedIn);
-            return _buildLayout();
-          },
-        ),
+        home: Builder(builder: (context) {
+          return StreamBuilder<User?>(
+            // stream: FirebaseAuth.instance.authStateChanges(),
+            stream: context
+                .read<AppManagerBloc>()
+                .appAuth
+                .firebaseAuth
+                .authStateChanges(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasData) {
+                context
+                    .read<AppManagerBloc>()
+                    .add(AppManagerEventFirebaseAuthenticated());
+              } else {
+                context
+                    .read<AppManagerBloc>()
+                    .add(AppManagerEventLoginFailure(message: ''));
+              }
+              // return _buildHome(_isLoggedIn);
+              return _buildLayout();
+            },
+          );
+        }),
       ),
     );
   }
@@ -43,7 +50,7 @@ class MatchingReviewerWebApp extends StatelessWidget {
     return BlocBuilder<AppManagerBloc, AppManagerState>(
       builder: ((context, state) {
         Widget layout;
-        if (state is AppManagerStateUnauthenticate) {
+        if (state is AppManagerStateRegisterStart) {
           layout = const RegisterView();
         } else if (state is AppManagerStateLoginSuccess) {
           layout = const Index();

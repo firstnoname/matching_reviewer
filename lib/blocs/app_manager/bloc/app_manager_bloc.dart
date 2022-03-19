@@ -23,8 +23,10 @@ class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
   AppManagerBloc() : super(AppManagerInitial()) {
     _appAuth = Authentication(this);
 
-    on<AppManagerEventLoginSucceed>(_onLoginSucceed);
+    on<AppManagerEventFirebaseAuthenticated>(_onFirebaseAuthenticated);
     on<AppManagerEventUserRegisterStart>(_onUserRegisterStart);
+    on<AppManagerEventLoginSucceed>(_onLoginSucceed);
+    on<AppManagerEventLoginFailure>(_onLoginFailure);
   }
 
   void updateCurrentUserProfile(User? userAuth, appModels.User? member) {
@@ -32,7 +34,15 @@ class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
     _currentUser = userAuth;
   }
 
-  FutureOr<void> _onUserRegisterStart(AppManagerEventUserRegisterStart event, Emitter<AppManagerState> emit) {
+  FutureOr<void> _onFirebaseAuthenticated(
+      AppManagerEventFirebaseAuthenticated event,
+      Emitter<AppManagerState> emit) {
+    appAuth.checkCurrentUserProfile();
+  }
+
+  FutureOr<void> _onUserRegisterStart(
+      AppManagerEventUserRegisterStart event, Emitter<AppManagerState> emit) {
+    emit(AppManagerStateRegisterStart());
   }
 
   FutureOr<void> _onLoginSucceed(
@@ -40,5 +50,6 @@ class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
     emit(AppManagerStateLoginSuccess());
   }
 
-  
+  FutureOr<void> _onLoginFailure(
+      AppManagerEventLoginFailure event, Emitter<AppManagerState> emit) {}
 }
