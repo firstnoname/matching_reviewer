@@ -51,7 +51,7 @@ class MatchingReviewerWebApp extends StatelessWidget {
       builder: ((context, state) {
         Widget layout;
         if (state is AppManagerStateRegisterStart) {
-          layout = const RegisterView();
+          layout = RegisterView();
         } else if (state is AppManagerStateLoginSuccess) {
           layout = const Index();
         } else {

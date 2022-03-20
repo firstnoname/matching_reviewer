@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matching_reviewer/utilities/utilities.dart';
 
 class GeneralInfoView extends StatelessWidget {
   const GeneralInfoView({Key? key}) : super(key: key);
@@ -14,18 +15,22 @@ class GeneralInfoView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text('General info'),
+          const Text('General info'),
           Row(
             children: [
               Expanded(
                 child: TextFormField(
-                  decoration: InputDecoration(hintText: 'First name'),
+                  decoration: const InputDecoration(hintText: 'First name'),
+                  validator: (value) =>
+                      Validator(context).isNotEmpty(value: value),
                 ),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: TextFormField(
-                  decoration: InputDecoration(hintText: 'Last name'),
+                  decoration: const InputDecoration(hintText: 'Last name'),
+                  validator: (value) =>
+                      Validator(context).isNotEmpty(value: value),
                 ),
               ),
             ],
@@ -57,17 +62,18 @@ class GeneralInfoView extends StatelessWidget {
                 const Text('Occupation'),
                 const SizedBox(width: 16),
                 DropdownButton(
-                    value: dropdownStudent,
-                    items: <String>['Student', 'Male']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      dropdownStudent = value ?? '';
-                    })
+                  value: dropdownStudent,
+                  items: <String>['Student', 'Male']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    dropdownStudent = value ?? '';
+                  },
+                ),
               ],
             ),
           ),
