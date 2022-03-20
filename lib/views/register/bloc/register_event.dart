@@ -7,5 +7,11 @@ class RegsiterEventFailure extends RegisterEvent {}
 
 class RegisterEventInProgress extends RegisterEvent {}
 
-class RegisterEventSubmittedForm extends RegisterEvent {}
+class RegisterEventSelectImage extends RegisterEvent {}
+
+class RegisterEventSubmittedForm extends RegisterEvent {
+  final User userInfo;
+
+  RegisterEventSubmittedForm({required this.userInfo});
+}
 

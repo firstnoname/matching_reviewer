@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_reviewer/utilities/utilities.dart';
+import 'package:matching_reviewer/views/register/bloc/register_bloc.dart';
 
 class GeneralInfoView extends StatelessWidget {
   const GeneralInfoView({Key? key}) : super(key: key);
@@ -31,6 +33,9 @@ class GeneralInfoView extends StatelessWidget {
                   decoration: const InputDecoration(hintText: 'Last name'),
                   validator: (value) =>
                       Validator(context).isNotEmpty(value: value),
+                      onFieldSubmitted: (value) {
+                        BlocProvider.of<RegisterBloc>(context).add(event);
+                      },
                 ),
               ),
             ],

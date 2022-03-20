@@ -13,6 +13,12 @@ class RegisterStateFailure extends RegisterState {
   RegisterStateFailure({required this.message});
 }
 
+class RegisterStateSelectImageSuccess extends RegisterState {
+  final Uint8List? imageBytes;
+
+  RegisterStateSelectImageSuccess({required this.imageBytes});
+}
+
 class RegisterStateSucceed extends RegisterState {}
 
 

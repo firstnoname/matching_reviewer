@@ -72,6 +72,7 @@ class Authentication {
       // _appManagerBloc.add(ICharmManagerEventShowUserPolicy());
     } else {
       // user register flow.
+      _firebaseAuth.currentUser!.uid;
       _appManagerBloc.add(AppManagerEventUserRegisterStart());
     }
   }

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:firebase_core/firebase_core.dart';
 
 import '../models/models.dart';
@@ -48,18 +50,19 @@ class UserAPI extends BasedAPI {
     return userList;
   }
 
-  Future<User> addUser(User userInfo) async {
+  Future<bool> addUser({required User userInfo}) async {
+    bool _isSuccess = true;
     try {
       print('user id -> ${userInfo.id}');
       await collection
           .doc(userInfo.id)
           .set(userInfo.toJson())
-          .then((value) => print('Add member success.'))
           .catchError((e) => print('Add member failed -> $e'));
     } on FirebaseException catch (e) {
+      _isSuccess = false;
       print('add member failed -> ${e.message}');
     }
-    return userInfo;
+    return _isSuccess;
   }
 
   Future<User> updateUserInfo(User userInfo) async {

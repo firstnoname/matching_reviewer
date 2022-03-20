@@ -12,6 +12,7 @@ class User {
   String? email;
   String? userName;
   String? token;
+  String? imageProfilePath;
 
   String get displayName => "$firstName $lastName";
 
@@ -23,6 +24,7 @@ class User {
       this.identityCard,
       this.phoneNumber,
       this.email,
+      this.imageProfilePath,
       this.token});
 
   Map<String, dynamic> toJsonWithoutID() {
@@ -39,6 +41,7 @@ class User {
     map['email'] = email;
     map['username'] = userName;
     map['phone_number'] = phoneNumber;
+    map['image_profile_path'] = imageProfilePath;
 
     return map;
   }
@@ -53,7 +56,8 @@ class User {
         identityCard = json['identity_card'],
         phoneNumber = json['phone_number'],
         userName = json['username'],
-        email = json['email'];
+        email = json['email'],
+        imageProfilePath=json['image_profile_path'];
 
   factory User.fromFirebaseUser(firebase.User user) {
     return User(
