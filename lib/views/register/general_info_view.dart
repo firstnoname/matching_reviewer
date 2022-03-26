@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:matching_reviewer/utilities/utilities.dart';
 
 class GeneralInfoView extends StatelessWidget {
+  final
   const GeneralInfoView({Key? key}) : super(key: key);
 
   @override
