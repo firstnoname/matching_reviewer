@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:matching_reviewer/blocs/blocs.dart';
 import 'package:matching_reviewer/utilities/utilities.dart';
+import 'package:matching_reviewer/views/register/select_role.dart';
 
 import '../views.dart';
 
@@ -51,7 +52,7 @@ class MatchingReviewerWebApp extends StatelessWidget {
       builder: ((context, state) {
         Widget layout;
         if (state is AppManagerStateRegisterStart) {
-          layout = RegisterView();
+          layout = const SelectRole();
         } else if (state is AppManagerStateLoginSuccess) {
           layout = const Index();
         } else {

@@ -11,7 +11,7 @@ class QuestionnaireAPI extends BasedAPI {
       questions: [
         Question(
           number: 0,
-          qeustion: 'Food',
+          question: 'Food',
           answers: [
             Answer(number: 0, answer: 'Fresh food', isSelected: false),
             Answer(number: 1, answer: 'Processed food', isSelected: false),
@@ -19,7 +19,7 @@ class QuestionnaireAPI extends BasedAPI {
         ),
         Question(
           number: 1,
-          qeustion: 'Cosumetics',
+          question: 'Cosumetics',
           answers: [
             Answer(number: 0, answer: 'Hair cosmetics', isSelected: false),
             Answer(number: 1, answer: 'Face cosmetics', isSelected: false),
@@ -34,7 +34,7 @@ class QuestionnaireAPI extends BasedAPI {
         ),
         Question(
           number: 2,
-          qeustion: 'Clothes',
+          question: 'Clothes',
           answers: [
             Answer(number: 0, answer: 'Shirt, Blouse', isSelected: false),
             Answer(
@@ -54,7 +54,7 @@ class QuestionnaireAPI extends BasedAPI {
         ),
         Question(
           number: 3,
-          qeustion: 'Cosumetics',
+          question: 'Cosumetics',
           answers: [
             Answer(
                 number: 0,

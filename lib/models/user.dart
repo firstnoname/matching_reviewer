@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
+enum UserRoles { admin, reviewer, entrepreneur }
+
 class User {
   static const String collection = 'users';
 
@@ -13,6 +15,7 @@ class User {
   String? userName;
   String? token;
   String? imageProfilePath;
+  String? userRole;
 
   String get displayName => "$firstName $lastName";
 
@@ -25,7 +28,8 @@ class User {
       this.phoneNumber,
       this.email,
       this.imageProfilePath,
-      this.token});
+      this.token,
+      this.userRole});
 
   Map<String, dynamic> toJsonWithoutID() {
     return toJson()..remove("id");
@@ -42,6 +46,7 @@ class User {
     map['username'] = userName;
     map['phone_number'] = phoneNumber;
     map['image_profile_path'] = imageProfilePath;
+    map['user_role'] = userRole;
 
     return map;
   }
@@ -57,7 +62,8 @@ class User {
         phoneNumber = json['phone_number'],
         userName = json['username'],
         email = json['email'],
-        imageProfilePath=json['image_profile_path'];
+        imageProfilePath = json['image_profile_path'],
+        userRole = json['user_role'];
 
   factory User.fromFirebaseUser(firebase.User user) {
     return User(

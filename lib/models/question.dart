@@ -4,19 +4,19 @@ import 'models.dart';
 
 class Question {
   int number;
-  String qeustion;
+  String question;
   List<Answer> answers;
 
   Question({
     required this.number,
-    required this.qeustion,
+    required this.question,
     required this.answers,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'number': number,
-      'qeustion': qeustion,
+      'qeustion': question,
       'answers': answers.map((x) => x.toMap()).toList(),
     };
   }
@@ -24,7 +24,7 @@ class Question {
   factory Question.fromMap(Map<String, dynamic> map) {
     return Question(
       number: map['number']?.toInt() ?? 0,
-      qeustion: map['qeustion'] ?? '',
+      question: map['qeustion'] ?? '',
       answers: List<Answer>.from(map['answers']?.map((x) => Answer.fromMap(x))),
     );
   }
