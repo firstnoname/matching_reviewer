@@ -2,14 +2,14 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:matching_reviewer/blocs/app_manager/bloc/app_manager_bloc.dart';
-import 'package:matching_reviewer/services/services.dart';
 import 'package:matching_reviewer/views/register/bloc/register_bloc.dart';
 import 'package:matching_reviewer/views/register/general_info_view.dart';
 import 'package:matching_reviewer/views/register/product_expertise_view.dart';
 import 'package:matching_reviewer/views/views.dart';
 
-import '../../models/models.dart';
+import 'entrepreneur_view.dart';
+
+
 
 class RegisterView extends StatelessWidget {
   final _key = GlobalKey<FormState>();
@@ -52,7 +52,7 @@ class RegisterView extends StatelessWidget {
                 radius: 70,
               )
             : CircleAvatar(
-                backgroundImage: MemoryImage(_profileImage!),
+                backgroundImage: MemoryImage(_profileImage),
                 radius: 70,
               ),
         TextButton(
@@ -61,8 +61,13 @@ class RegisterView extends StatelessWidget {
               context.read<RegisterBloc>().add(RegisterEventSelectImage()),
         ),
         Row(
-          children: const [
-            GeneralInfoView(),
+          children:  [
+            Column(
+              children: [
+                const GeneralInfoView(),
+                EntrepreneurView(),
+              ],
+            ),
             ProductExpertiseView(),
           ],
         ),
@@ -99,7 +104,7 @@ class RegisterView extends StatelessWidget {
                 radius: 70,
               )
             : CircleAvatar(
-                backgroundImage: MemoryImage(_profileImage!),
+                backgroundImage: MemoryImage(_profileImage),
                 radius: 70,
               ),
         TextButton(
@@ -108,8 +113,8 @@ class RegisterView extends StatelessWidget {
               context.read<RegisterBloc>().add(RegisterEventSelectImage()),
         ),
         Row(
-          children: const [
-            GeneralInfoView(),
+          children:  [
+            const GeneralInfoView(),
             ProductExpertiseView(),
           ],
         ),

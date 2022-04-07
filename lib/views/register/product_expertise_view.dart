@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 
 enum SingingCharacter { lafayette, jefferson }
+enum Food { fresh, processed }
+enum Cosmetic { hair, face, body, fragrance, miscellaneous, other }
+enum Cloth { shirt, trouser, hat, scarf, skirt, shoes, belt, accessory, bag }
+enum Service { accommodation, tour, restaurant, cafe }
 
 class ProductExpertiseView extends StatelessWidget {
-  const ProductExpertiseView({Key? key}) : super(key: key);
+  ProductExpertiseView({Key? key}) : super(key: key);
+
+  final ValueNotifier<Food> _initFood = ValueNotifier(Food.fresh);
+  final ValueNotifier<Cosmetic> _initCosmetic = ValueNotifier(Cosmetic.hair);
+  final ValueNotifier<Cloth> _initCloth = ValueNotifier(Cloth.shirt);
+  final ValueNotifier<Service> _initService = ValueNotifier(Service.accommodation);
 
   @override
   Widget build(BuildContext context) {
-    SingingCharacter? _character = SingingCharacter.lafayette;
+
     return Container(
       width: MediaQuery.of(context).size.width / 2,
       padding: EdgeInsets.symmetric(
@@ -16,16 +25,16 @@ class ProductExpertiseView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('Product Expertise'),
-          _buildFoodsOption(_character),
-          _buildCosmeticsOption(_character),
-          _buildClothes(_character),
-          _buildServicesOption(_character),
+          _buildFoodsOption(),
+          _buildCosmeticsOption(),
+          _buildClothes(),
+          _buildServicesOption(),
         ],
       ),
     );
   }
 
-  Row _buildFoodsOption(SingingCharacter _character) {
+  Row _buildFoodsOption() {
     return Row(
       children: [
         Expanded(
@@ -33,33 +42,34 @@ class ProductExpertiseView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('1. Food'),
-              Row(
-                children: [
-                  Flexible(
-                    child: RadioListTile<SingingCharacter>(
-                      title: const Text('Fresh food'),
-                      value: SingingCharacter.lafayette,
-                      groupValue: _character,
-                      onChanged: (SingingCharacter? value) {
-                        // setState(() {
-                        //   _character = value;
-                        // });
-                      },
-                    ),
-                  ),
-                  Flexible(
-                    child: RadioListTile<SingingCharacter>(
-                      title: const Text('Processed food'),
-                      value: SingingCharacter.jefferson,
-                      groupValue: _character,
-                      onChanged: (SingingCharacter? value) {
-                        // setState(() {
-                        //   _character = value;
-                        // });
-                      },
-                    ),
-                  ),
-                ],
+              ValueListenableBuilder<Food>(
+                valueListenable: _initFood,
+                builder: (BuildContext context, Food value, Widget? child) {
+                  return Row(
+                    children: [
+                      Flexible(
+                        child: RadioListTile<Food>(
+                          title: const Text('Fresh food'),
+                          value: Food.fresh,
+                          groupValue: _initFood.value,
+                          onChanged: (Food? value) {
+                            _initFood.value = value!;
+                          },
+                        ),
+                      ),
+                      Flexible(
+                        child: RadioListTile<Food>(
+                          title: const Text('Processed food'),
+                          value: Food.processed,
+                          groupValue: _initFood.value,
+                          onChanged: (Food? value) {
+                            _initFood.value = value!;
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           ),
@@ -68,7 +78,7 @@ class ProductExpertiseView extends StatelessWidget {
     );
   }
 
-  Row _buildCosmeticsOption(SingingCharacter _character) {
+  Row _buildCosmeticsOption() {
     return Row(
       children: [
         Expanded(
@@ -76,90 +86,83 @@ class ProductExpertiseView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('2. Cosmetics'),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Hair cosmetics'),
-                          value: SingingCharacter.lafayette,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
+              ValueListenableBuilder(
+                  valueListenable: _initCosmetic,
+                  builder:
+                      (BuildContext context, Cosmetic value, Widget? child) {
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: RadioListTile<Cosmetic>(
+                                title: const Text('Hair cosmetics'),
+                                value: Cosmetic.hair,
+                                groupValue: _initCosmetic.value,
+                                onChanged: (Cosmetic? value) {
+                                  _initCosmetic.value = value!;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile<Cosmetic>(
+                                title: const Text('Face cosmetics'),
+                                value: Cosmetic.face,
+                                groupValue: _initCosmetic.value,
+                                onChanged: (Cosmetic? value) {
+                                  _initCosmetic.value = value!;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile<Cosmetic>(
+                                title: const Text('Body cosmetics'),
+                                value: Cosmetic.body,
+                                groupValue: _initCosmetic.value,
+                                onChanged: (Cosmetic? value) {
+                                  _initCosmetic.value = value!;
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Face cosmetics'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
+                        Row(
+                          children: [
+                            Flexible(
+                              child: RadioListTile<Cosmetic>(
+                                title: const Text('Fragrances'),
+                                value: Cosmetic.fragrance,
+                                groupValue: _initCosmetic.value,
+                                onChanged: (Cosmetic? value) {
+                                  _initCosmetic.value = value!;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile<Cosmetic>(
+                                title: const Text('Miscellaneous cosmetics'),
+                                value: Cosmetic.miscellaneous,
+                                groupValue: _initCosmetic.value,
+                                onChanged: (Cosmetic? value) {
+                                  _initCosmetic.value = value!;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile<Cosmetic>(
+                                title: const Text('Other...'),
+                                value: Cosmetic.other,
+                                groupValue: _initCosmetic.value,
+                                onChanged: (Cosmetic? value) {
+                                  _initCosmetic.value = value!;
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Body cosmetics'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Fragrances'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
-                        ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Miscellaneous cosmetics'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
-                        ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Other...'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    );
+                  }),
             ],
           ),
         ),
@@ -167,7 +170,7 @@ class ProductExpertiseView extends StatelessWidget {
     );
   }
 
-  Row _buildClothes(SingingCharacter _character) {
+  Row _buildClothes() {
     return Row(
       children: [
         Expanded(
@@ -175,130 +178,117 @@ class ProductExpertiseView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('3. Clothes'),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Shirt, Blouse, T-shirt, Jacket'),
-                          value: SingingCharacter.lafayette,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
+              ValueListenableBuilder(
+                  valueListenable: _initCloth,
+                  builder: (BuildContext context, Cloth value, Widget? child) {
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: RadioListTile<Cloth>(
+                                title: const Text(
+                                    'Shirt, Blouse, T-shirt, Jacket'),
+                                value: Cloth.shirt,
+                                groupValue: _initCloth.value,
+                                onChanged: (Cloth? value) {
+                                  _initCloth.value = value!;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile<Cloth>(
+                                title: const Text('Trousers, Pants'),
+                                value: Cloth.trouser,
+                                groupValue: _initCloth.value,
+                                onChanged: (Cloth? value) {
+                                  _initCloth.value = value!;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile<Cloth>(
+                                title: const Text('Cap, Hat'),
+                                value: Cloth.hat,
+                                groupValue: _initCloth.value,
+                                onChanged: (Cloth? value) {
+                                  _initCloth.value = value!;
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Trousers, Pants'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
+                        Row(
+                          children: [
+                            Flexible(
+                              child: RadioListTile<Cloth>(
+                                title: const Text('Scarf'),
+                                value: Cloth.scarf,
+                                groupValue: _initCloth.value,
+                                onChanged: (Cloth? value) {
+                                  _initCloth.value = value!;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile<Cloth>(
+                                title: const Text('Skirt'),
+                                value: Cloth.skirt,
+                                groupValue: _initCloth.value,
+                                onChanged: (Cloth? value) {
+                                  _initCloth.value = value!;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile<Cloth>(
+                                title: const Text('Shoes, Boot, Sneaker'),
+                                value: Cloth.shoes,
+                                groupValue: _initCloth.value,
+                                onChanged: (Cloth? value) {
+                                  _initCloth.value = value!;
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Cap, Hat'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
+                        Row(
+                          children: [
+                            Flexible(
+                              child: RadioListTile<Cloth>(
+                                title: const Text('Belt'),
+                                value: Cloth.belt,
+                                groupValue: _initCloth.value,
+                                onChanged: (Cloth? value) {
+                                  _initCloth.value = value!;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile<Cloth>(
+                                title: const Text('Accessory'),
+                                value: Cloth.accessory,
+                                groupValue: _initCloth.value,
+                                onChanged: (Cloth? value) {
+                                  _initCloth.value = value!;
+                                },
+                              ),
+                            ),
+                            Flexible(
+                              child: RadioListTile<Cloth>(
+                                title: const Text('Bag, Handbag, Purse'),
+                                value: Cloth.bag,
+                                groupValue: _initCloth.value,
+                                onChanged: (Cloth? value) {
+                                  _initCloth.value = value!;
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Scarf'),
-                          value: SingingCharacter.lafayette,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
-                        ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Skirt'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
-                        ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Shoes, Boot, Sneaker'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Belt'),
-                          value: SingingCharacter.lafayette,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
-                        ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Accessory'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
-                        ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<SingingCharacter>(
-                          title: const Text('Bag, Handbag, Purse'),
-                          value: SingingCharacter.jefferson,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            // setState(() {
-                            //   _character = value;
-                            // });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    );
+                  }),
             ],
           ),
         ),
@@ -306,7 +296,7 @@ class ProductExpertiseView extends StatelessWidget {
     );
   }
 
-  Row _buildServicesOption(SingingCharacter _character) {
+  Row _buildServicesOption() {
     return Row(
       children: [
         Expanded(
@@ -314,33 +304,35 @@ class ProductExpertiseView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('4. Services'),
-              Row(
-                children: [
-                  Flexible(
-                    child: RadioListTile<SingingCharacter>(
-                      title: const Text('Accommodation (Hotel, Resort, Hostel, Homestay)'),
-                      value: SingingCharacter.lafayette,
-                      groupValue: _character,
-                      onChanged: (SingingCharacter? value) {
-                        // setState(() {
-                        //   _character = value;
-                        // });
-                      },
-                    ),
-                  ),
-                  Flexible(
-                    child: RadioListTile<SingingCharacter>(
-                      title: const Text('Tour'),
-                      value: SingingCharacter.jefferson,
-                      groupValue: _character,
-                      onChanged: (SingingCharacter? value) {
-                        // setState(() {
-                        //   _character = value;
-                        // });
-                      },
-                    ),
-                  ),
-                ],
+              ValueListenableBuilder(
+                valueListenable: _initService,
+                builder: (BuildContext context, Service value, Widget? child) {
+                  return Row(
+                    children: [
+                      Flexible(
+                        child: RadioListTile<Service>(
+                          title: const Text(
+                              'Accommodation (Hotel, Resort, Hostel, Homestay)'),
+                          value: Service.accommodation,
+                          groupValue: _initService.value,
+                          onChanged: (Service? value) {
+                            _initService.value=value!;
+                          },
+                        ),
+                      ),
+                      Flexible(
+                        child: RadioListTile<Service>(
+                          title: const Text('Tour'),
+                          value: Service.tour,
+                          groupValue: _initService.value,
+                          onChanged: (Service? value) {
+                            _initService.value=value!;
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                }
               ),
             ],
           ),
