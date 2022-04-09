@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:matching_reviewer/models/models.dart';
 import 'package:matching_reviewer/widgets/chip_generator.dart';
+
+import '../../widgets/widgets.dart';
 
 class MatchingView extends StatelessWidget {
   const MatchingView({Key? key}) : super(key: key);
@@ -21,7 +24,7 @@ class MatchingView extends StatelessWidget {
                   shrinkWrap: true,
                   itemCount: 20,
                   itemBuilder: (context, index) => GestureDetector(
-                    onTap: () => const MatchingView(),
+                    onTap: () => _showMyDialog(context),
                     child: Card(
                       child: Row(
                         children: [
@@ -67,6 +70,55 @@ class MatchingView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showMyDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:
+              const Text('Confirm paring between reviewer and entrepreneur?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Row(
+                  children: [
+                    UserCardWidget(
+                        userInfo: User(
+                            firstName: 'Chatnattaphon',
+                            lastName: 'Ratnaratorn',
+                            userRole: 'reviewer')),
+                    UserCardWidget(
+                        userInfo: User(
+                            firstName: 'Some company',
+                            lastName: '',
+                            userRole: 'entrepreneur')),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Approve'),
+              style: TextButton.styleFrom(primary: Colors.lightGreen),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel'),
+              style: TextButton.styleFrom(primary: Colors.red),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

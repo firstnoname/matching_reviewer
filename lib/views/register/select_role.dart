@@ -9,6 +9,7 @@ class SelectRole extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
                 child: const Text('Reviewer'),
@@ -17,6 +18,7 @@ class SelectRole extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => RegisterView(isReviewer: true),
                     ))),
+            const SizedBox(width: 36),
             ElevatedButton(
                 child: const Text('Entrepreneur/SMEs'),
                 onPressed: () => Navigator.push(
