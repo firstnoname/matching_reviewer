@@ -2,14 +2,13 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:matching_reviewer/models/models.dart';
 import 'package:matching_reviewer/views/register/bloc/register_bloc.dart';
 import 'package:matching_reviewer/views/register/general_info_view.dart';
 import 'package:matching_reviewer/views/register/product_expertise_view.dart';
 import 'package:matching_reviewer/views/views.dart';
 
 import 'entrepreneur_view.dart';
-
-
 
 class RegisterView extends StatelessWidget {
   final _key = GlobalKey<FormState>();
@@ -61,14 +60,14 @@ class RegisterView extends StatelessWidget {
               context.read<RegisterBloc>().add(RegisterEventSelectImage()),
         ),
         Row(
-          children:  [
+          children: [
             Column(
               children: [
                 const GeneralInfoView(),
                 EntrepreneurView(),
               ],
             ),
-            ProductExpertiseView(),
+            ProductExpertiseView(productExpertise: ProductExpertise()),
           ],
         ),
         ElevatedButton(
@@ -113,9 +112,9 @@ class RegisterView extends StatelessWidget {
               context.read<RegisterBloc>().add(RegisterEventSelectImage()),
         ),
         Row(
-          children:  [
+          children: [
             const GeneralInfoView(),
-            ProductExpertiseView(),
+            ProductExpertiseView(productExpertise: ProductExpertise()),
           ],
         ),
         ElevatedButton(

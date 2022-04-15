@@ -1,3 +1,1 @@
-class ProductExpertise {
-
-}
+export 'food.dart';

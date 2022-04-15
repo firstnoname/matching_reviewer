@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:matching_reviewer/models/models.dart';
 
 enum UserRoles { admin, reviewer, entrepreneur }
 
@@ -16,6 +17,7 @@ class User {
   String? token;
   String? imageProfilePath;
   String? userRole;
+  ProductExpertise? productExpertise;
 
   String get displayName => "$firstName $lastName";
 
@@ -29,7 +31,8 @@ class User {
       this.email,
       this.imageProfilePath,
       this.token,
-      this.userRole});
+      this.userRole,
+      this.productExpertise});
 
   Map<String, dynamic> toJsonWithoutID() {
     return toJson()..remove("id");
@@ -47,6 +50,7 @@ class User {
     map['phone_number'] = phoneNumber;
     map['image_profile_path'] = imageProfilePath;
     map['user_role'] = userRole;
+    map['product_expertise'] = productExpertise?.toMap();
 
     return map;
   }

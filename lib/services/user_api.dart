@@ -27,7 +27,9 @@ class UserAPI extends BasedAPI {
   }
 
   Future<User?> getUser(String? id) async {
-    var snapshot = await collection.doc(id).get();
+    var snapshot = await collection.doc(id).get().catchError((e) {
+      print('Get user error. msg -> ${e.toString()}');
+    });
     return (!snapshot.exists)
         ? null
         : User.fromJson(

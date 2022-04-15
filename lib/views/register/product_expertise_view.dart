@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:matching_reviewer/models/models.dart';
 
 enum SingingCharacter { lafayette, jefferson }
 enum Food { fresh, processed }
@@ -6,21 +7,38 @@ enum Cosmetic { hair, face, body, fragrance, miscellaneous, other }
 enum Cloth { shirt, trouser, hat, scarf, skirt, shoes, belt, accessory, bag }
 enum Service { accommodation, tour, restaurant, cafe }
 
-class ProductExpertiseView extends StatelessWidget {
-  ProductExpertiseView({Key? key}) : super(key: key);
+class ProductExpertiseView extends StatefulWidget {
+  final ProductExpertise productExpertise;
 
+  const ProductExpertiseView({Key? key, required this.productExpertise})
+      : super(key: key);
+
+  @override
+  State<ProductExpertiseView> createState() => _ProductExpertiseViewState();
+}
+
+class _ProductExpertiseViewState extends State<ProductExpertiseView> {
   final ValueNotifier<Food> _initFood = ValueNotifier(Food.fresh);
+
   final ValueNotifier<Cosmetic> _initCosmetic = ValueNotifier(Cosmetic.hair);
+
   final ValueNotifier<Cloth> _initCloth = ValueNotifier(Cloth.shirt);
-  final ValueNotifier<Service> _initService = ValueNotifier(Service.accommodation);
+
+  final ValueNotifier<Service> _initService =
+  ValueNotifier(Service.accommodation);
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
-      width: MediaQuery.of(context).size.width / 2,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width / 2,
       padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.05),
+          horizontal: MediaQuery
+              .of(context)
+              .size
+              .width * 0.05),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,34 +60,27 @@ class ProductExpertiseView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('1. Food'),
-              ValueListenableBuilder<Food>(
-                valueListenable: _initFood,
-                builder: (BuildContext context, Food value, Widget? child) {
-                  return Row(
-                    children: [
-                      Flexible(
-                        child: RadioListTile<Food>(
-                          title: const Text('Fresh food'),
-                          value: Food.fresh,
-                          groupValue: _initFood.value,
-                          onChanged: (Food? value) {
-                            _initFood.value = value!;
+              Row(
+                children: [
+                  Flexible(
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          value:
+                          widget.productExpertise.food?.freshFood ?? false,
+                          onChanged: (bool? value) {
+                            widget.productExpertise.food?.freshFood =
+                                value ?? false;
+                            print(widget.productExpertise.food?.freshFood ??
+                                false);
                           },
                         ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<Food>(
-                          title: const Text('Processed food'),
-                          value: Food.processed,
-                          groupValue: _initFood.value,
-                          onChanged: (Food? value) {
-                            _initFood.value = value!;
-                          },
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                        const Text('Fresh food')
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -305,35 +316,35 @@ class ProductExpertiseView extends StatelessWidget {
             children: [
               const Text('4. Services'),
               ValueListenableBuilder(
-                valueListenable: _initService,
-                builder: (BuildContext context, Service value, Widget? child) {
-                  return Row(
-                    children: [
-                      Flexible(
-                        child: RadioListTile<Service>(
-                          title: const Text(
-                              'Accommodation (Hotel, Resort, Hostel, Homestay)'),
-                          value: Service.accommodation,
-                          groupValue: _initService.value,
-                          onChanged: (Service? value) {
-                            _initService.value=value!;
-                          },
+                  valueListenable: _initService,
+                  builder:
+                      (BuildContext context, Service value, Widget? child) {
+                    return Row(
+                      children: [
+                        Flexible(
+                          child: RadioListTile<Service>(
+                            title: const Text(
+                                'Accommodation (Hotel, Resort, Hostel, Homestay)'),
+                            value: Service.accommodation,
+                            groupValue: _initService.value,
+                            onChanged: (Service? value) {
+                              _initService.value = value!;
+                            },
+                          ),
                         ),
-                      ),
-                      Flexible(
-                        child: RadioListTile<Service>(
-                          title: const Text('Tour'),
-                          value: Service.tour,
-                          groupValue: _initService.value,
-                          onChanged: (Service? value) {
-                            _initService.value=value!;
-                          },
+                        Flexible(
+                          child: RadioListTile<Service>(
+                            title: const Text('Tour'),
+                            value: Service.tour,
+                            groupValue: _initService.value,
+                            onChanged: (Service? value) {
+                              _initService.value = value!;
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }
-              ),
+                      ],
+                    );
+                  }),
             ],
           ),
         ),
