@@ -19,7 +19,7 @@ class Index extends StatelessWidget {
       print(result.docs[0].data());
     }
 
-    callAPI();
+    // callAPI();
 
     return Scaffold(
       appBar: AppBar(

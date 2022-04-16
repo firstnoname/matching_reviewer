@@ -4,8 +4,9 @@ import 'package:matching_reviewer/models/product_expertise/product_expertise.dar
 
 class ProductExpertise {
   Food? food;
+  Cosmetic? cosmetic;
 
-  ProductExpertise({this.food});
+  ProductExpertise({this.food, this.cosmetic});
 
   factory ProductExpertise.fromMap(Map<String, dynamic> map) {
     return ProductExpertise(

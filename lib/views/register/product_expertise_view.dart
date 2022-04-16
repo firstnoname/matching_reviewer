@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:matching_reviewer/models/models.dart';
 
 enum SingingCharacter { lafayette, jefferson }
-enum Food { fresh, processed }
-enum Cosmetic { hair, face, body, fragrance, miscellaneous, other }
+
 enum Cloth { shirt, trouser, hat, scarf, skirt, shoes, belt, accessory, bag }
 enum Service { accommodation, tour, restaurant, cafe }
 
 class ProductExpertiseView extends StatefulWidget {
   final ProductExpertise productExpertise;
+  final Function(ProductExpertise) onUpdateValue;
 
-  const ProductExpertiseView({Key? key, required this.productExpertise})
+  const ProductExpertiseView(
+      {Key? key, required this.productExpertise, required this.onUpdateValue})
       : super(key: key);
 
   @override
@@ -18,27 +19,17 @@ class ProductExpertiseView extends StatefulWidget {
 }
 
 class _ProductExpertiseViewState extends State<ProductExpertiseView> {
-  final ValueNotifier<Food> _initFood = ValueNotifier(Food.fresh);
-
-  final ValueNotifier<Cosmetic> _initCosmetic = ValueNotifier(Cosmetic.hair);
-
   final ValueNotifier<Cloth> _initCloth = ValueNotifier(Cloth.shirt);
 
   final ValueNotifier<Service> _initService =
-  ValueNotifier(Service.accommodation);
+      ValueNotifier(Service.accommodation);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width / 2,
+      width: MediaQuery.of(context).size.width / 2,
       padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery
-              .of(context)
-              .size
-              .width * 0.05),
+          horizontal: MediaQuery.of(context).size.width * 0.05),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -68,15 +59,34 @@ class _ProductExpertiseViewState extends State<ProductExpertiseView> {
                         Checkbox(
                           checkColor: Colors.white,
                           value:
-                          widget.productExpertise.food?.freshFood ?? false,
+                              widget.productExpertise.food?.freshFood ?? false,
                           onChanged: (bool? value) {
-                            widget.productExpertise.food?.freshFood =
-                                value ?? false;
-                            print(widget.productExpertise.food?.freshFood ??
-                                false);
+                            setState(() {
+                              widget.productExpertise.food?.freshFood =
+                                  value ?? false;
+                            });
+                            widget.onUpdateValue(widget.productExpertise);
                           },
                         ),
                         const Text('Fresh food')
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          value: widget.productExpertise.food?.processedFood ??
+                              false,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              widget.productExpertise.food?.processedFood =
+                                  value ?? false;
+                            });
+                          },
+                        ),
+                        const Text('Proccessed food')
                       ],
                     ),
                   ),
@@ -97,83 +107,70 @@ class _ProductExpertiseViewState extends State<ProductExpertiseView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('2. Cosmetics'),
-              ValueListenableBuilder(
-                  valueListenable: _initCosmetic,
-                  builder:
-                      (BuildContext context, Cosmetic value, Widget? child) {
-                    return Column(
+              Row(
+                children: [
+                  Flexible(
+                    child: Row(
                       children: [
-                        Row(
-                          children: [
-                            Flexible(
-                              child: RadioListTile<Cosmetic>(
-                                title: const Text('Hair cosmetics'),
-                                value: Cosmetic.hair,
-                                groupValue: _initCosmetic.value,
-                                onChanged: (Cosmetic? value) {
-                                  _initCosmetic.value = value!;
-                                },
-                              ),
-                            ),
-                            Flexible(
-                              child: RadioListTile<Cosmetic>(
-                                title: const Text('Face cosmetics'),
-                                value: Cosmetic.face,
-                                groupValue: _initCosmetic.value,
-                                onChanged: (Cosmetic? value) {
-                                  _initCosmetic.value = value!;
-                                },
-                              ),
-                            ),
-                            Flexible(
-                              child: RadioListTile<Cosmetic>(
-                                title: const Text('Body cosmetics'),
-                                value: Cosmetic.body,
-                                groupValue: _initCosmetic.value,
-                                onChanged: (Cosmetic? value) {
-                                  _initCosmetic.value = value!;
-                                },
-                              ),
-                            ),
-                          ],
+                        Checkbox(
+                          checkColor: Colors.white,
+                          value:
+                              widget.productExpertise.cosmetic?.hairCosmetic ??
+                                  false,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              widget.productExpertise.cosmetic?.hairCosmetic =
+                                  value ?? false;
+                            });
+                            widget.onUpdateValue(widget.productExpertise);
+                          },
                         ),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: RadioListTile<Cosmetic>(
-                                title: const Text('Fragrances'),
-                                value: Cosmetic.fragrance,
-                                groupValue: _initCosmetic.value,
-                                onChanged: (Cosmetic? value) {
-                                  _initCosmetic.value = value!;
-                                },
-                              ),
-                            ),
-                            Flexible(
-                              child: RadioListTile<Cosmetic>(
-                                title: const Text('Miscellaneous cosmetics'),
-                                value: Cosmetic.miscellaneous,
-                                groupValue: _initCosmetic.value,
-                                onChanged: (Cosmetic? value) {
-                                  _initCosmetic.value = value!;
-                                },
-                              ),
-                            ),
-                            Flexible(
-                              child: RadioListTile<Cosmetic>(
-                                title: const Text('Other...'),
-                                value: Cosmetic.other,
-                                groupValue: _initCosmetic.value,
-                                onChanged: (Cosmetic? value) {
-                                  _initCosmetic.value = value!;
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+                        const Text('Hair cosmetic')
                       ],
-                    );
-                  }),
+                    ),
+                  ),
+                  Flexible(
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          value:
+                              widget.productExpertise.cosmetic?.faceCosmetics ??
+                                  false,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              widget.productExpertise.cosmetic?.faceCosmetics =
+                                  value ?? false;
+                            });
+                            widget.onUpdateValue(widget.productExpertise);
+                          },
+                        ),
+                        const Text('Face cosmetic')
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          value:
+                              widget.productExpertise.cosmetic?.bodyCosmetics ??
+                                  false,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              widget.productExpertise.cosmetic?.bodyCosmetics =
+                                  value ?? false;
+                            });
+                            widget.onUpdateValue(widget.productExpertise);
+                          },
+                        ),
+                        const Text('Body cosmetics')
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -182,6 +179,7 @@ class _ProductExpertiseViewState extends State<ProductExpertiseView> {
   }
 
   Row _buildClothes() {
+    // shirt, trouser, hat, scarf, skirt, shoes, belt, accessory, bag
     return Row(
       children: [
         Expanded(
@@ -197,14 +195,24 @@ class _ProductExpertiseViewState extends State<ProductExpertiseView> {
                         Row(
                           children: [
                             Flexible(
-                              child: RadioListTile<Cloth>(
-                                title: const Text(
-                                    'Shirt, Blouse, T-shirt, Jacket'),
-                                value: Cloth.shirt,
-                                groupValue: _initCloth.value,
-                                onChanged: (Cloth? value) {
-                                  _initCloth.value = value!;
-                                },
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    checkColor: Colors.white,
+                                    value: widget.productExpertise.cosmetic
+                                            ?.bodyCosmetics ??
+                                        false,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        widget.productExpertise.cosmetic
+                                            ?.bodyCosmetics = value ?? false;
+                                      });
+                                      widget.onUpdateValue(
+                                          widget.productExpertise);
+                                    },
+                                  ),
+                                  const Text('Shirt, Blouse, T-shirt, Jacket')
+                                ],
                               ),
                             ),
                             Flexible(
