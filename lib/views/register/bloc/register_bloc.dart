@@ -11,7 +11,7 @@ part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  late Uint8List? _imageBytes;
+  Uint8List? _imageBytes;
 
   RegisterBloc() : super(RegisterInitial()) {
     on<RegisterEventSelectImage>(_onSelectImage);
@@ -28,15 +28,17 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       RegisterEventSubmittedForm event, Emitter<RegisterState> emit) async {
     final _path = "profile_users/${event.userInfo.id}";
 
-    String? _uploadedProfilePath =
-        await ImageApi().uploadFile(_imageBytes!, _path);
+    if (_imageBytes != null) {
+      String? _uploadedProfilePath =
+          await ImageApi().uploadFile(_imageBytes!, _path);
 
-    if (_uploadedProfilePath.isNotEmpty) {
-      event.userInfo.imageProfilePath = _uploadedProfilePath;
-      bool _isUserInfoSuccess =
-          await UserAPI().addUser(userInfo: event.userInfo);
-      if (_isUserInfoSuccess) {
-        emit(RegisterStateSucceed());
+      if (_uploadedProfilePath.isNotEmpty) {
+        event.userInfo.imageProfilePath = _uploadedProfilePath;
+        bool _isUserInfoSuccess =
+            await UserAPI().addUser(userInfo: event.userInfo);
+        if (_isUserInfoSuccess) {
+          emit(RegisterStateSucceed());
+        }
       }
     }
 

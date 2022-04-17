@@ -1,4 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'dart:convert';
+
 import 'package:matching_reviewer/models/models.dart';
 
 enum UserRoles { admin, reviewer, entrepreneur }
@@ -17,64 +18,70 @@ class User {
   String? token;
   String? imageProfilePath;
   String? userRole;
+  String? sex;
+  String? occupation;
   ProductExpertise? productExpertise;
 
-  String get displayName => "$firstName $lastName";
+  User({
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.dateOfBirth,
+    this.identityCard,
+    this.phoneNumber,
+    this.email,
+    this.userName,
+    this.token,
+    this.imageProfilePath,
+    this.userRole,
+    this.sex,
+    this.occupation,
+    this.productExpertise,
+  });
 
-  User(
-      {this.id,
-      this.firstName,
-      this.lastName,
-      this.dateOfBirth,
-      this.identityCard,
-      this.phoneNumber,
-      this.email,
-      this.imageProfilePath,
-      this.token,
-      this.userRole,
-      this.productExpertise});
-
-  Map<String, dynamic> toJsonWithoutID() {
-    return toJson()..remove("id");
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'dateOfBirth': dateOfBirth?.millisecondsSinceEpoch,
+      'identityCard': identityCard,
+      'phoneNumber': phoneNumber,
+      'email': email,
+      'userName': userName,
+      'token': token,
+      'imageProfilePath': imageProfilePath,
+      'userRole': userRole,
+      'sex': sex,
+      'occupation': occupation,
+      'productExpertise': productExpertise?.toMap(),
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-
-    map['first_name'] = firstName;
-    map['last_name'] = lastName;
-    map['date_of_birth'] = dateOfBirth?.toIso8601String();
-    map['identity_card'] = identityCard;
-    map['email'] = email;
-    map['username'] = userName;
-    map['phone_number'] = phoneNumber;
-    map['image_profile_path'] = imageProfilePath;
-    map['user_role'] = userRole;
-    map['product_expertise'] = productExpertise?.toMap();
-
-    return map;
-  }
-
-  User.fromJson(dynamic json)
-      : id = json['uid'],
-        firstName = json['first_name'],
-        lastName = json['last_name'],
-        dateOfBirth = json["date_of_birth"] != null
-            ? DateTime.parse(json["date_of_birth"])
-            : null,
-        identityCard = json['identity_card'],
-        phoneNumber = json['phone_number'],
-        userName = json['username'],
-        email = json['email'],
-        imageProfilePath = json['image_profile_path'],
-        userRole = json['user_role'];
-
-  factory User.fromFirebaseUser(firebase.User user) {
+  factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: user.uid,
-      firstName: '',
-      lastName: '',
-      dateOfBirth: DateTime.now(),
+      id: map['id'],
+      firstName: map['firstName'],
+      lastName: map['lastName'],
+      dateOfBirth: map['dateOfBirth'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['dateOfBirth'])
+          : null,
+      identityCard: map['identityCard'],
+      phoneNumber: map['phoneNumber'],
+      email: map['email'],
+      userName: map['userName'],
+      token: map['token'],
+      imageProfilePath: map['imageProfilePath'],
+      userRole: map['userRole'],
+      sex: map['sex'],
+      occupation: map['occupation'],
+      productExpertise: map['productExpertise'] != null
+          ? ProductExpertise.fromMap(map['productExpertise'])
+          : null,
     );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory User.fromJson(String source) => User.fromMap(json.decode(source));
 }

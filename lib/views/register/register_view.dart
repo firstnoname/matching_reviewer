@@ -15,16 +15,25 @@ import 'entrepreneur_view.dart';
 class RegisterView extends StatelessWidget {
   final _key = GlobalKey<FormState>();
   final isReviewer;
+  ProductExpertise _productExpertise = ProductExpertise(
+      food: Food(), cosmetic: Cosmetic(), cloth: Cloth(), service: Service());
+  User _userInfo = User();
 
   RegisterView({Key? key, this.isReviewer = false}) : super(key: key);
-
-  onUpdateExpertise(ProductExpertise productExpertise) {}
 
   @override
   Widget build(BuildContext context) {
     Uint8List? _profileImage;
-    ProductExpertise productExpertise =
-        ProductExpertise(food: Food(), cosmetic: Cosmetic());
+
+    onUpdateExpertise(ProductExpertise productExpertise) {
+      _productExpertise = productExpertise;
+    }
+
+    onUpdateUserInfo(User userInfo) {
+      _userInfo = userInfo;
+      print('firstname -> ${_userInfo.firstName}');
+      print('sex -> ${_userInfo.sex}');
+    }
 
     return Scaffold(
       appBar: AppBar(),
@@ -39,10 +48,10 @@ class RegisterView extends StatelessWidget {
                   _profileImage = state.imageBytes;
                 }
                 return isReviewer == true
-                    ? _buildReviewerForm(
-                        _profileImage, context, productExpertise)
-                    : _buildEntrepreneurForm(
-                        _profileImage, context, productExpertise);
+                    ? _buildReviewerForm(_userInfo, _profileImage, context,
+                        _productExpertise, onUpdateExpertise, onUpdateUserInfo)
+                    : _buildEntrepreneurForm(_userInfo, _profileImage, context,
+                        _productExpertise, onUpdateExpertise, onUpdateUserInfo);
               },
             ),
           ),
@@ -51,8 +60,13 @@ class RegisterView extends StatelessWidget {
     );
   }
 
-  Column _buildEntrepreneurForm(Uint8List? _profileImage, BuildContext context,
-      ProductExpertise productExpertise) {
+  Column _buildEntrepreneurForm(
+      User userInfo,
+      Uint8List? _profileImage,
+      BuildContext context,
+      ProductExpertise productExpertise,
+      dynamic onUpdateProductExpertise,
+      dynamic onUpdateUserInfo) {
     return Column(
       children: [
         _profileImage == null
@@ -72,15 +86,16 @@ class RegisterView extends StatelessWidget {
           children: [
             Column(
               children: [
-                const GeneralInfoView(),
+                GeneralInfoView(
+                  userInfo: userInfo,
+                  onUpdateUserInfo: onUpdateUserInfo,
+                ),
                 EntrepreneurView(),
               ],
             ),
             ProductExpertiseView(
-                productExpertise: ProductExpertise(
-                    food: productExpertise.food,
-                    cosmetic: productExpertise.cosmetic),
-                onUpdateValue: onUpdateExpertise),
+                productExpertise: productExpertise,
+                onUpdateValue: onUpdateProductExpertise),
           ],
         ),
         ElevatedButton(
@@ -98,6 +113,7 @@ class RegisterView extends StatelessWidget {
                   .appAuth
                   .firebaseCurrentUser!
                   .uid;
+
               context
                   .read<RegisterBloc>()
                   .add(RegisterEventSubmittedForm(userInfo: _userInfo));
@@ -109,8 +125,13 @@ class RegisterView extends StatelessWidget {
     );
   }
 
-  Column _buildReviewerForm(Uint8List? _profileImage, BuildContext context,
-      ProductExpertise productExpertise) {
+  Column _buildReviewerForm(
+      User userInfo,
+      Uint8List? _profileImage,
+      BuildContext context,
+      ProductExpertise productExpertise,
+      dynamic onUpdateProductExpertise,
+      dynamic onUpdateUserInfo) {
     return Column(
       children: [
         _profileImage == null
@@ -128,33 +149,41 @@ class RegisterView extends StatelessWidget {
         ),
         Row(
           children: [
-            const GeneralInfoView(),
+            GeneralInfoView(
+                userInfo: userInfo, onUpdateUserInfo: onUpdateUserInfo),
             ProductExpertiseView(
-                productExpertise: ProductExpertise(
-                    food: productExpertise.food,
-                    cosmetic: productExpertise.cosmetic),
-                onUpdateValue: onUpdateExpertise),
+                productExpertise: productExpertise,
+                onUpdateValue: onUpdateProductExpertise),
           ],
         ),
         ElevatedButton(
           child: const Text('Register'),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return const Index();
-              },
-            ));
-            // if (_key.currentState!.validate()) {
-            //   User _userInfo = User();
-            //   _userInfo.id = context
-            //       .read<AppManagerBloc>()
-            //       .appAuth
-            //       .firebaseCurrentUser!
-            //       .uid;
-            //   context.read<RegisterBloc>().add(
-            //       RegisterEventSubmittedForm(userInfo: _userInfo));
-            //   // QuestionnaireAPI().testAddData();
-            // }
+            if (_key.currentState!.validate()) {
+              _userInfo.id = context
+                  .read<AppManagerBloc>()
+                  .appAuth
+                  .firebaseCurrentUser!
+                  .uid;
+              _userInfo.productExpertise = _productExpertise;
+              // User _userInfo = User(
+              //     id: context
+              //         .read<AppManagerBloc>()
+              //         .appAuth
+              //         .firebaseCurrentUser!
+              //         .uid,
+              //     firstName: '');
+
+              context
+                  .read<RegisterBloc>()
+                  .add(RegisterEventSubmittedForm(userInfo: userInfo));
+
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const Index();
+                },
+              ));
+            }
           },
         ),
       ],

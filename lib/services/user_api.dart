@@ -32,7 +32,7 @@ class UserAPI extends BasedAPI {
     });
     return (!snapshot.exists)
         ? null
-        : User.fromJson(
+        : User.fromMap(
             snapshot.data()!..addAll({'uid': id}),
           );
   }
@@ -58,7 +58,7 @@ class UserAPI extends BasedAPI {
       print('user id -> ${userInfo.id}');
       await collection
           .doc(userInfo.id)
-          .set(userInfo.toJson())
+          .set(userInfo.toMap())
           .catchError((e) => print('Add member failed -> $e'));
     } on FirebaseException catch (e) {
       _isSuccess = false;
@@ -68,7 +68,7 @@ class UserAPI extends BasedAPI {
   }
 
   Future<User> updateUserInfo(User userInfo) async {
-    await collection.doc(userInfo.id).update(userInfo.toJson());
+    await collection.doc(userInfo.id).update(userInfo.toMap());
     return userInfo;
   }
 

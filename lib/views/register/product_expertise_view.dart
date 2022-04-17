@@ -3,9 +3,6 @@ import 'package:matching_reviewer/models/models.dart';
 
 enum SingingCharacter { lafayette, jefferson }
 
-enum Cloth { shirt, trouser, hat, scarf, skirt, shoes, belt, accessory, bag }
-enum Service { accommodation, tour, restaurant, cafe }
-
 class ProductExpertiseView extends StatefulWidget {
   final ProductExpertise productExpertise;
   final Function(ProductExpertise) onUpdateValue;
@@ -19,11 +16,6 @@ class ProductExpertiseView extends StatefulWidget {
 }
 
 class _ProductExpertiseViewState extends State<ProductExpertiseView> {
-  final ValueNotifier<Cloth> _initCloth = ValueNotifier(Cloth.shirt);
-
-  final ValueNotifier<Service> _initService =
-      ValueNotifier(Service.accommodation);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,7 +78,7 @@ class _ProductExpertiseViewState extends State<ProductExpertiseView> {
                             });
                           },
                         ),
-                        const Text('Proccessed food')
+                        const Text('Processed food')
                       ],
                     ),
                   ),
@@ -187,127 +179,187 @@ class _ProductExpertiseViewState extends State<ProductExpertiseView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('3. Clothes'),
-              ValueListenableBuilder(
-                  valueListenable: _initCloth,
-                  builder: (BuildContext context, Cloth value, Widget? child) {
-                    return Column(
-                      children: [
-                        Row(
+              Column(
+                children: [
+                  Wrap(
+                    runSpacing: 5.0,
+                    spacing: 5.0,
+                    children: [
+                      Flexible(
+                        child: Row(
                           children: [
-                            Flexible(
-                              child: Row(
-                                children: [
-                                  Checkbox(
-                                    checkColor: Colors.white,
-                                    value: widget.productExpertise.cosmetic
-                                            ?.bodyCosmetics ??
-                                        false,
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        widget.productExpertise.cosmetic
-                                            ?.bodyCosmetics = value ?? false;
-                                      });
-                                      widget.onUpdateValue(
-                                          widget.productExpertise);
-                                    },
-                                  ),
-                                  const Text('Shirt, Blouse, T-shirt, Jacket')
-                                ],
-                              ),
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value:
+                                  widget.productExpertise.cloth?.shirt ?? false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.cloth?.shirt =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
                             ),
-                            Flexible(
-                              child: RadioListTile<Cloth>(
-                                title: const Text('Trousers, Pants'),
-                                value: Cloth.trouser,
-                                groupValue: _initCloth.value,
-                                onChanged: (Cloth? value) {
-                                  _initCloth.value = value!;
-                                },
-                              ),
-                            ),
-                            Flexible(
-                              child: RadioListTile<Cloth>(
-                                title: const Text('Cap, Hat'),
-                                value: Cloth.hat,
-                                groupValue: _initCloth.value,
-                                onChanged: (Cloth? value) {
-                                  _initCloth.value = value!;
-                                },
-                              ),
-                            ),
+                            const Text('Shirt, Blouse, T-shirt, Jacket')
                           ],
                         ),
-                        Row(
+                      ),
+                      Flexible(
+                        child: Row(
                           children: [
-                            Flexible(
-                              child: RadioListTile<Cloth>(
-                                title: const Text('Scarf'),
-                                value: Cloth.scarf,
-                                groupValue: _initCloth.value,
-                                onChanged: (Cloth? value) {
-                                  _initCloth.value = value!;
-                                },
-                              ),
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value: widget.productExpertise.cloth?.trouser ??
+                                  false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.cloth?.trouser =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
                             ),
-                            Flexible(
-                              child: RadioListTile<Cloth>(
-                                title: const Text('Skirt'),
-                                value: Cloth.skirt,
-                                groupValue: _initCloth.value,
-                                onChanged: (Cloth? value) {
-                                  _initCloth.value = value!;
-                                },
-                              ),
-                            ),
-                            Flexible(
-                              child: RadioListTile<Cloth>(
-                                title: const Text('Shoes, Boot, Sneaker'),
-                                value: Cloth.shoes,
-                                groupValue: _initCloth.value,
-                                onChanged: (Cloth? value) {
-                                  _initCloth.value = value!;
-                                },
-                              ),
-                            ),
+                            const Text('Trousers, Pants')
                           ],
                         ),
-                        Row(
+                      ),
+                      Flexible(
+                        child: Row(
                           children: [
-                            Flexible(
-                              child: RadioListTile<Cloth>(
-                                title: const Text('Belt'),
-                                value: Cloth.belt,
-                                groupValue: _initCloth.value,
-                                onChanged: (Cloth? value) {
-                                  _initCloth.value = value!;
-                                },
-                              ),
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value:
+                                  widget.productExpertise.cloth?.cap ?? false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.cloth?.cap =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
                             ),
-                            Flexible(
-                              child: RadioListTile<Cloth>(
-                                title: const Text('Accessory'),
-                                value: Cloth.accessory,
-                                groupValue: _initCloth.value,
-                                onChanged: (Cloth? value) {
-                                  _initCloth.value = value!;
-                                },
-                              ),
-                            ),
-                            Flexible(
-                              child: RadioListTile<Cloth>(
-                                title: const Text('Bag, Handbag, Purse'),
-                                value: Cloth.bag,
-                                groupValue: _initCloth.value,
-                                onChanged: (Cloth? value) {
-                                  _initCloth.value = value!;
-                                },
-                              ),
-                            ),
+                            const Text('Cap, Hat')
                           ],
                         ),
-                      ],
-                    );
-                  }),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value:
+                                  widget.productExpertise.cloth?.scarf ?? false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.cloth?.scarf =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text('Scarf')
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value:
+                                  widget.productExpertise.cloth?.skirt ?? false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.cloth?.skirt =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text('Skirt')
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value:
+                                  widget.productExpertise.cloth?.shoes ?? false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.cloth?.shoes =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text('Shoes, Boot, Sneaker')
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value:
+                                  widget.productExpertise.cloth?.belt ?? false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.cloth?.belt =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text('Belt')
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value: widget.productExpertise.cloth?.accessory ??
+                                  false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.cloth?.accessory =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text('Accessory')
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value:
+                                  widget.productExpertise.cloth?.bag ?? false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.cloth?.bag =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text('Bag, Handbag, Purse')
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -323,36 +375,114 @@ class _ProductExpertiseViewState extends State<ProductExpertiseView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('4. Services'),
-              ValueListenableBuilder(
-                  valueListenable: _initService,
-                  builder:
-                      (BuildContext context, Service value, Widget? child) {
-                    return Row(
-                      children: [
-                        Flexible(
-                          child: RadioListTile<Service>(
-                            title: const Text(
-                                'Accommodation (Hotel, Resort, Hostel, Homestay)'),
-                            value: Service.accommodation,
-                            groupValue: _initService.value,
-                            onChanged: (Service? value) {
-                              _initService.value = value!;
-                            },
-                          ),
+              Column(
+                children: [
+                  Wrap(
+                    runSpacing: 5.0,
+                    spacing: 5.0,
+                    children: [
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value: widget
+                                      .productExpertise.service?.accomodation ??
+                                  false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.service
+                                      ?.accomodation = value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text(
+                                'Accommodation (Hotel, Resort, Hostel, Homestay')
+                          ],
                         ),
-                        Flexible(
-                          child: RadioListTile<Service>(
-                            title: const Text('Tour'),
-                            value: Service.tour,
-                            groupValue: _initService.value,
-                            onChanged: (Service? value) {
-                              _initService.value = value!;
-                            },
-                          ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value: widget.productExpertise.service?.tour ??
+                                  false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.service?.tour =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text('Tour')
+                          ],
                         ),
-                      ],
-                    );
-                  }),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value:
+                                  widget.productExpertise.service?.restaurant ??
+                                      false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.service?.restaurant =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text('Restaurants')
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value: widget.productExpertise.service?.cafe ??
+                                  false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.service?.cafe =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text('Cafe')
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              value: widget.productExpertise.service?.other ??
+                                  false,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  widget.productExpertise.service?.other =
+                                      value ?? false;
+                                });
+                                widget.onUpdateValue(widget.productExpertise);
+                              },
+                            ),
+                            const Text('Other')
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
         ),

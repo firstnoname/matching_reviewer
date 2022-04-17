@@ -5,12 +5,17 @@ import 'package:matching_reviewer/models/product_expertise/product_expertise.dar
 class ProductExpertise {
   Food? food;
   Cosmetic? cosmetic;
+  Cloth? cloth;
+  Service? service;
 
-  ProductExpertise({this.food, this.cosmetic});
+  ProductExpertise({this.food, this.cosmetic, this.cloth, this.service});
 
   factory ProductExpertise.fromMap(Map<String, dynamic> map) {
     return ProductExpertise(
       food: Food.fromMap(map['food']),
+      cosmetic: Cosmetic.fromMap(map['cosmetic']),
+      cloth: Cloth.fromMap(map['cloth']),
+      service: Service.fromMap(map['service']),
     );
   }
 
@@ -22,6 +27,9 @@ class ProductExpertise {
   Map<String, dynamic> toMap() {
     return {
       'food': food?.toMap(),
+      'cosmetic': cosmetic?.toMap(),
+      'cloth': cloth?.toMap(),
+      'service': service?.toMap(),
     };
   }
 }

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:matching_reviewer/models/models.dart';
 import 'package:matching_reviewer/utilities/utilities.dart';
 
 class GeneralInfoView extends StatelessWidget {
-  const GeneralInfoView({Key? key}) : super(key: key);
+  final User userInfo;
+  final Function(User) onUpdateUserInfo;
+  const GeneralInfoView(
+      {Key? key, required this.userInfo, required this.onUpdateUserInfo})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +28,7 @@ class GeneralInfoView extends StatelessWidget {
                   decoration: const InputDecoration(hintText: 'First name'),
                   validator: (value) =>
                       Validator(context).isNotEmpty(value: value),
+                  onFieldSubmitted: (value) => userInfo.firstName = value,
                 ),
               ),
               const SizedBox(width: 16),
@@ -31,7 +37,9 @@ class GeneralInfoView extends StatelessWidget {
                   decoration: const InputDecoration(hintText: 'Last name'),
                   validator: (value) =>
                       Validator(context).isNotEmpty(value: value),
-                  onFieldSubmitted: (value) {},
+                  onFieldSubmitted: (value) {
+                    userInfo.lastName = value;
+                  },
                 ),
               ),
             ],
@@ -41,23 +49,24 @@ class GeneralInfoView extends StatelessWidget {
             child: Row(
               children: [
                 ValueListenableBuilder(
-                  valueListenable: dropdownSex,
-                  builder: (BuildContext context, String value, Widget? child) {
-                    return DropdownButton(
-                      value: dropdownSex.value,
-                      items: <String>['Female', 'Male']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? value) {
-                        dropdownSex.value = value ?? '';
-                      },
-                    );
-                  }
-                )
+                    valueListenable: dropdownSex,
+                    builder:
+                        (BuildContext context, String value, Widget? child) {
+                      return DropdownButton(
+                        value: dropdownSex.value,
+                        items: <String>['Female', 'Male']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? value) {
+                          dropdownSex.value = value ?? '';
+                          userInfo.sex = value;
+                        },
+                      );
+                    })
               ],
             ),
           ),
@@ -78,6 +87,7 @@ class GeneralInfoView extends StatelessWidget {
                   }).toList(),
                   onChanged: (String? value) {
                     dropdownStudent.value = value ?? '';
+                    userInfo.occupation = value;
                   },
                 ),
               ],
