@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:matching_reviewer/models/models.dart';
-import 'package:matching_reviewer/widgets/chip_generator.dart';
 
 import '../../widgets/widgets.dart';
 
@@ -11,20 +10,32 @@ class MatchingView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Entrepreneur, SME'),
+        title: const Text('Matching'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.2),
-                child: _listBuilder(),
-              ),
+      body: SingleChildScrollView(
+        child: _selectRole(),
+      ),
+    );
+  }
+
+  Widget _selectRole() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('Entrepreneur'),
+              onPressed: () {},
             ),
-          ),
-        ],
+            const SizedBox(width: 16),
+            ElevatedButton(
+              child: const Text('Reviewer'),
+              onPressed: () {},
+            )
+          ],
+        ),
       ),
     );
   }
