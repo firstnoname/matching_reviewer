@@ -64,7 +64,7 @@ class Authentication {
   }
 
   checkCurrentUserProfile() async {
-    var user = await UserAPI().getUser(_firebaseAuth.currentUser!.uid);
+    var user = await UserAPI().getUserInfo(_firebaseAuth.currentUser!.uid);
     if (user != null) {
       // update user info in app.
       _appManagerBloc.updateCurrentUserProfile(_firebaseAuth.currentUser, user);

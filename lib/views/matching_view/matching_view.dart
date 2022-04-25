@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_reviewer/models/models.dart';
+import 'package:matching_reviewer/views/matching_view/bloc/matching_bloc.dart';
 
 import '../../widgets/widgets.dart';
 
@@ -13,12 +15,25 @@ class MatchingView extends StatelessWidget {
         title: const Text('Matching'),
       ),
       body: SingleChildScrollView(
-        child: _selectRole(),
+        child: BlocProvider(
+          create: (context) => MatchingBloc(),
+          child: BlocBuilder<MatchingBloc, MatchingState>(
+            builder: (context, state) {
+              if (state is MatchingInitial) {
+                return _selectRole(context);
+              } else if (state is MatchingStateGetUsersSuccess) {
+                return _listBuilder(users: state.users);
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ),
       ),
     );
   }
 
-  Widget _selectRole() {
+  Widget _selectRole(BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -27,12 +42,16 @@ class MatchingView extends StatelessWidget {
           children: [
             ElevatedButton(
               child: const Text('Entrepreneur'),
-              onPressed: () {},
+              onPressed: () => context
+                  .read<MatchingBloc>()
+                  .add(MatchingEventSelectRole(isReviewer: false)),
             ),
             const SizedBox(width: 16),
             ElevatedButton(
               child: const Text('Reviewer'),
-              onPressed: () {},
+              onPressed: () => context
+                  .read<MatchingBloc>()
+                  .add(MatchingEventSelectRole(isReviewer: true)),
             )
           ],
         ),
@@ -40,45 +59,13 @@ class MatchingView extends StatelessWidget {
     );
   }
 
-  Widget _listBuilder() {
+  Widget _listBuilder({required List<User> users}) {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: 20,
+      itemCount: users.length,
       itemBuilder: (context, index) => GestureDetector(
         onTap: () => _showMyDialog(context),
-        child: Card(
-          child: Row(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: CircleAvatar(
-                  radius: 50,
-                  child: Icon(Icons.people),
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Some company name',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Row(
-                    children: const [
-                      ChipGenerator(label: 'Food', color: Color(0xFFff6666)),
-                      ChipGenerator(
-                          label: 'Cosmetics', color: Color(0xFF007f5c)),
-                      ChipGenerator(label: 'Cloths', color: Color(0xFF5f65d3)),
-                      ChipGenerator(
-                          label: 'Services', color: Color(0xFF19ca21)),
-                    ],
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
+        child: UserCardWidget(userInfo: users[index]),
       ),
     );
   }

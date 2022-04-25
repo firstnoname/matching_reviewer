@@ -5,6 +5,7 @@ import 'package:matching_reviewer/utilities/utilities.dart';
 class GeneralInfoView extends StatelessWidget {
   final User userInfo;
   final Function(User) onUpdateUserInfo;
+
   const GeneralInfoView(
       {Key? key, required this.userInfo, required this.onUpdateUserInfo})
       : super(key: key);
@@ -28,6 +29,7 @@ class GeneralInfoView extends StatelessWidget {
                   decoration: const InputDecoration(hintText: 'First name'),
                   validator: (value) =>
                       Validator(context).isNotEmpty(value: value),
+                  onChanged: (value) => userInfo.firstName = value,
                   onFieldSubmitted: (value) => userInfo.firstName = value,
                 ),
               ),
@@ -37,6 +39,7 @@ class GeneralInfoView extends StatelessWidget {
                   decoration: const InputDecoration(hintText: 'Last name'),
                   validator: (value) =>
                       Validator(context).isNotEmpty(value: value),
+                  onChanged: (value) => userInfo.lastName = value,
                   onFieldSubmitted: (value) {
                     userInfo.lastName = value;
                   },

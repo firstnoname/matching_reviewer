@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import '../models/models.dart';
@@ -26,7 +27,7 @@ class UserAPI extends BasedAPI {
     });
   }
 
-  Future<User?> getUser(String? id) async {
+  Future<User?> getUserInfo(String? id) async {
     var snapshot = await collection.doc(id).get().catchError((e) {
       print('Get user error. msg -> ${e.toString()}');
     });
@@ -37,17 +38,23 @@ class UserAPI extends BasedAPI {
           );
   }
 
-  Future<List<User>> getUserList(String filterByName) async {
+  Future<List<User>> getUsers({String? userRole = ''}) async {
     List<User> userList = [];
 
-    // await FirebaseFirestore.instance
-    //     .collection(collectionName)
-    //     .get()
-    //     .then((value) {
-    //   userList = value.docs
-    //       .map((user) => Member.fromJson(user.data()..addAll({'id': user.id})))
-    //       .toList();
-    // });
+    try {
+      QuerySnapshot<Map<String, dynamic>> response = await collection
+          .where('userRole', isEqualTo: userRole)
+          .where('productExpertise.food.processed_food', isEqualTo: 'true')
+          .get();
+
+      print('user response -> $response');
+
+      userList = response.docs.map((e) => User.fromMap(e.data())).toList();
+
+      print('user size -> ${userList.length}');
+    } catch (e) {
+      print('exception -> $e');
+    }
 
     return userList;
   }

@@ -14,7 +14,7 @@ import 'entrepreneur_view.dart';
 
 class RegisterView extends StatelessWidget {
   final _key = GlobalKey<FormState>();
-  final isReviewer;
+  final bool isReviewer;
   ProductExpertise _productExpertise = ProductExpertise(
       food: Food(), cosmetic: Cosmetic(), cloth: Cloth(), service: Service());
   User _userInfo = User();
@@ -41,7 +41,7 @@ class RegisterView extends StatelessWidget {
         child: Form(
           key: _key,
           child: BlocProvider<RegisterBloc>(
-            create: (context) => RegisterBloc(),
+            create: (context) => RegisterBloc(isReviewer: isReviewer),
             child: BlocBuilder<RegisterBloc, RegisterState>(
               builder: (context, state) {
                 if (state is RegisterStateSelectImageSuccess) {
@@ -166,13 +166,6 @@ class RegisterView extends StatelessWidget {
                   .firebaseCurrentUser!
                   .uid;
               _userInfo.productExpertise = _productExpertise;
-              // User _userInfo = User(
-              //     id: context
-              //         .read<AppManagerBloc>()
-              //         .appAuth
-              //         .firebaseCurrentUser!
-              //         .uid,
-              //     firstName: '');
 
               context
                   .read<RegisterBloc>()
