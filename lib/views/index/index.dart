@@ -11,7 +11,7 @@ class Index extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User _userInfo = User(firstName: 'Chatnattpahon', lastName: 'Ratnaratorn');
+    User _userInfo = context.read<AppManagerBloc>().member;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -41,41 +41,9 @@ class Index extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.2),
-                // child: buildList(),
-                child: const Text('Display page for each role of user'),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  ListView buildList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: 20,
-      itemBuilder: (context, index) => GestureDetector(
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MatchingView(),
-            )),
-        child: UserCardWidget(
-          userInfo: User(
-            firstName: 'Chatnattaphon',
-            lastName: 'Ratnaratorn',
-            userRole: 'reviewer',
-          ),
-        ),
-      ),
+      body: _userInfo.userRole == 'reviewer'
+          ? const ReviewerView()
+          : const SMEView(),
     );
   }
 }
