@@ -21,8 +21,13 @@ class MatchingView extends StatelessWidget {
             builder: (context, state) {
               if (state is MatchingInitial) {
                 return _selectRole(context);
-              } else if (state is MatchingStateGetUsersSuccess) {
-                return _listBuilder(users: state.users);
+              } else if (state is MatchingSelectRoleSuccess) {
+                return _selectCategory(context);
+              } else if (state is MatchingStateGetOptionsOneSuccess) {
+                return _listBuilderOptionOne(
+                    role: state.role, users: state.users);
+              } else if (state is MatchingStateSelectOptionOneSuccess) {
+                return _listBuilderOptionTwo(users: state.userList);
               } else {
                 return Container();
               }
@@ -42,16 +47,18 @@ class MatchingView extends StatelessWidget {
           children: [
             ElevatedButton(
               child: const Text('Entrepreneur'),
-              onPressed: () => context
-                  .read<MatchingBloc>()
-                  .add(MatchingEventSelectRole(isReviewer: false)),
+              onPressed: () => context.read<MatchingBloc>().add(
+                  MatchingEventSelectedRole(
+                      selectedRole: UserRoles.entrepreneur)),
+              // onPressed: () => context
+              //     .read<MatchingBloc>()
+              //     .add(MatchingEventSelectRole(isReviewer: false)),
             ),
             const SizedBox(width: 16),
             ElevatedButton(
               child: const Text('Reviewer'),
-              onPressed: () => context
-                  .read<MatchingBloc>()
-                  .add(MatchingEventSelectRole(isReviewer: true)),
+              onPressed: () => context.read<MatchingBloc>().add(
+                  MatchingEventSelectedRole(selectedRole: UserRoles.reviewer)),
             )
           ],
         ),
@@ -59,14 +66,210 @@ class MatchingView extends StatelessWidget {
     );
   }
 
-  Widget _listBuilder({required List<User> users}) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: users.length,
-      itemBuilder: (context, index) => GestureDetector(
-        onTap: () => _showMyDialog(context),
-        child: UserCardWidget(userInfo: users[index]),
-      ),
+  Widget _selectCategory(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'food',
+                        selectedSubCategory: 'fresh_food')),
+                child: const ChipGenerator(
+                    label: 'Fresh food', color: Color(0xFFff6666))),
+            GestureDetector(
+              onTap: () => context.read<MatchingBloc>().add(
+                  MatchingSelectedCategory(
+                      selectedCategory: 'food',
+                      selectedSubCategory: 'processed_food')),
+              child: const ChipGenerator(
+                  label: 'Process food', color: Color(0xFFff6666)),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'cosmetic',
+                        selectedSubCategory: 'hair_cosmetic')),
+                child: const ChipGenerator(
+                    label: 'Hair cosmetics', color: Color(0xFF007f5c))),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'cosmetic',
+                        selectedSubCategory: 'face_cosmetic')),
+                child: const ChipGenerator(
+                    label: 'Face cosmetics', color: Color(0xFF007f5c))),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'cosmetic',
+                        selectedSubCategory: 'body_cosmetic')),
+                child: const ChipGenerator(
+                    label: 'Body cosmetics', color: Color(0xFF007f5c))),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'cosmetic',
+                        selectedSubCategory: 'fragrances')),
+                child: const ChipGenerator(
+                    label: 'Fragrances', color: Color(0xFF007f5c))),
+            GestureDetector(
+              onTap: () => context.read<MatchingBloc>().add(
+                  MatchingSelectedCategory(
+                      selectedCategory: 'cosmetic',
+                      selectedSubCategory: 'miscellaneous_cosmetic')),
+              child: const ChipGenerator(
+                  label: 'Miscellaneous cosmetics', color: Color(0xFF007f5c)),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () => context.read<MatchingBloc>().add(
+                  MatchingSelectedCategory(
+                      selectedCategory: 'cloth', selectedSubCategory: 'shirt')),
+              child: const ChipGenerator(
+                  label: 'Shirt, Blouse, T-shirt, Jacket',
+                  color: Color(0xFF5f65d3)),
+            ),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'cloth',
+                        selectedSubCategory: 'trouser')),
+                child: const ChipGenerator(
+                    label: 'Trousers, Pants', color: Color(0xFF5f65d3))),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'cloth', selectedSubCategory: 'cap')),
+                child: const ChipGenerator(
+                    label: 'Cap, Hat', color: Color(0xFF5f65d3))),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'cloth',
+                        selectedSubCategory: 'scarf')),
+                child: const ChipGenerator(
+                    label: 'Scarf', color: Color(0xFF5f65d3))),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'cloth',
+                        selectedSubCategory: 'skirt')),
+                child: const ChipGenerator(
+                    label: 'Skirt', color: Color(0xFF5f65d3))),
+            GestureDetector(
+              onTap: () => context.read<MatchingBloc>().add(
+                  MatchingSelectedCategory(
+                      selectedCategory: 'cloth', selectedSubCategory: 'shoes')),
+              child: const ChipGenerator(
+                  label: 'Shoes, Boot, Sneaker', color: Color(0xFF5f65d3)),
+            ),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'cloth',
+                        selectedSubCategory: 'belt')),
+                child: const ChipGenerator(
+                    label: 'Belt', color: Color(0xFF5f65d3))),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'cloth',
+                        selectedSubCategory: 'accessory')),
+                child: const ChipGenerator(
+                    label: 'Accessory', color: Color(0xFF5f65d3))),
+            GestureDetector(
+              onTap: () => context.read<MatchingBloc>().add(
+                  MatchingSelectedCategory(
+                      selectedCategory: 'cloth', selectedSubCategory: 'bag')),
+              child: const ChipGenerator(
+                  label: 'Bag, Handbag, Purse', color: Color(0xFF5f65d3)),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () => context.read<MatchingBloc>().add(
+                  MatchingSelectedCategory(
+                      selectedCategory: 'service',
+                      selectedSubCategory: 'accommodation')),
+              child: const ChipGenerator(
+                  label: 'Accommodation(Hotel, Resort, Hostel)',
+                  color: Color(0xFF19ca21)),
+            ),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'service',
+                        selectedSubCategory: 'tour')),
+                child: const ChipGenerator(
+                    label: 'tour', color: Color(0xFF19ca21))),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'service',
+                        selectedSubCategory: 'restaurant')),
+                child: const ChipGenerator(
+                    label: 'Restaurants', color: Color(0xFF19ca21))),
+            GestureDetector(
+                onTap: () => context.read<MatchingBloc>().add(
+                    MatchingSelectedCategory(
+                        selectedCategory: 'service',
+                        selectedSubCategory: 'cafe')),
+                child: const ChipGenerator(
+                    label: 'Cafe', color: Color(0xFF19ca21)))
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _listBuilderOptionOne(
+      {required UserRoles role, required List<User> users}) {
+    return Column(
+      children: [
+        const Text('Select SME'),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: users.length,
+          itemBuilder: (context, index) => GestureDetector(
+            onTap: () => context
+                .read<MatchingBloc>()
+                .add(MatchingEventSelectOptionOne(optionOne: users[index])),
+            child: UserCardWidget(userInfo: users[index]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _listBuilderOptionTwo({required List<User> users}) {
+    return Column(
+      children: [
+        const Text('Select reviewer'),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: users.length,
+          itemBuilder: (context, index) => GestureDetector(
+            onTap: () {
+              context
+                  .read<MatchingBloc>()
+                  .add(MatchingEventSelectOptionTwo(optionTwo: users[index]));
+              _showMyDialog(context);
+            },
+            child: UserCardWidget(userInfo: users[index]),
+          ),
+        ),
+      ],
     );
   }
 
@@ -74,7 +277,7 @@ class MatchingView extends StatelessWidget {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
+      builder: (BuildContext ctx) {
         return AlertDialog(
           title:
               const Text('Confirm paring between reviewer and entrepreneur?'),
@@ -84,15 +287,9 @@ class MatchingView extends StatelessWidget {
                 Row(
                   children: [
                     UserCardWidget(
-                        userInfo: User(
-                            firstName: 'Chatnattaphon',
-                            lastName: 'Ratnaratorn',
-                            userRole: 'reviewer')),
+                        userInfo: context.read<MatchingBloc>().optionOne),
                     UserCardWidget(
-                        userInfo: User(
-                            firstName: 'Some company',
-                            lastName: '',
-                            userRole: 'entrepreneur')),
+                        userInfo: context.read<MatchingBloc>().optionTwo),
                   ],
                 ),
               ],
@@ -103,14 +300,16 @@ class MatchingView extends StatelessWidget {
               child: const Text('Approve'),
               style: TextButton.styleFrom(primary: Colors.lightGreen),
               onPressed: () {
-                Navigator.of(context).pop();
+                context.read<MatchingBloc>().add(MatchingEventApproved());
+                Navigator.of(ctx).pop();
+                Navigator.of(ctx).pop();
               },
             ),
             TextButton(
               child: const Text('Cancel'),
               style: TextButton.styleFrom(primary: Colors.red),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(ctx).pop();
               },
             ),
           ],

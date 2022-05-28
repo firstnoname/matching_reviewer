@@ -1,7 +1,4 @@
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import '../models/models.dart';
 import 'services.dart';
@@ -38,13 +35,17 @@ class UserAPI extends BasedAPI {
           );
   }
 
-  Future<List<User>> getUsers({String? userRole = ''}) async {
+  Future<List<User>> getUsers({
+    String? userRole = '',
+    String? category = '',
+    String? subCategory = '',
+  }) async {
     List<User> userList = [];
 
     try {
       QuerySnapshot<Map<String, dynamic>> response = await collection
           .where('userRole', isEqualTo: userRole)
-          .where('productExpertise.food.processed_food', isEqualTo: 'true')
+          .where('productExpertise.$category.$subCategory', isEqualTo: true)
           .get();
 
       print('user response -> $response');

@@ -3,8 +3,30 @@ part of 'matching_bloc.dart';
 @immutable
 abstract class MatchingEvent {}
 
-class MatchingEventSelectRole extends MatchingEvent {
-  final bool isReviewer;
+class MatchingEventSelectedRole extends MatchingEvent {
+  final UserRoles selectedRole;
 
-  MatchingEventSelectRole({required this.isReviewer});
+  MatchingEventSelectedRole({required this.selectedRole});
 }
+
+class MatchingSelectedCategory extends MatchingEvent {
+  final String selectedCategory;
+  final String selectedSubCategory;
+
+  MatchingSelectedCategory(
+      {required this.selectedCategory, required this.selectedSubCategory});
+}
+
+class MatchingEventSelectOptionOne extends MatchingEvent {
+  final User optionOne;
+
+  MatchingEventSelectOptionOne({required this.optionOne});
+}
+
+class MatchingEventSelectOptionTwo extends MatchingEvent {
+  final User optionTwo;
+
+  MatchingEventSelectOptionTwo({required this.optionTwo});
+}
+
+class MatchingEventApproved extends MatchingEvent {}
