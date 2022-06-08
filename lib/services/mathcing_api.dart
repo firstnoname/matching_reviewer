@@ -17,7 +17,6 @@ class MatchingAPI extends BasedAPI {
       required User entrepreneur,
       required String category,
       required String subCategory}) async {
-
     Matching matching = Matching(
         entrepreneur: entrepreneur,
         reviewer: reviewer,
@@ -26,8 +25,22 @@ class MatchingAPI extends BasedAPI {
 
     var response = await collection.add(matching.toMap());
 
-    print('response -> ${response}');
+    print('response -> $response');
 
     return false;
+  }
+
+  Future<List<Matching>> getMatchingList({required String userId}) async {
+    var response = await collection
+        .where('entrepreneur.id', isEqualTo: userId)
+        .get()
+        .catchError((error) {});
+    List<Matching> _list = [];
+    if (response.docs.isNotEmpty) {
+      _list = response.docs
+          .map((e) => Matching.fromMap(e.data()..addAll({'id': e.id})))
+          .toList();
+    }
+    return _list;
   }
 }
