@@ -32,7 +32,6 @@ dependencies:
   flutter_bloc: ^8.0.1
   image_picker_web: ^2.1.0
   flutter_svg: ^1.0.3
-  date_time_picker: ^2.1.0
 
   # Firebase
   firebase_core: ^1.13.1

@@ -13,8 +13,8 @@ class MatchingAPI extends BasedAPI {
   MatchingAPI._() : super(collectionName: collectionName);
 
   Future<bool> addMatching(
-      {required User reviewer,
-      required User entrepreneur,
+      { User? reviewer,
+       User? entrepreneur,
       required String category,
       required String subCategory}) async {
     Matching matching = Matching(

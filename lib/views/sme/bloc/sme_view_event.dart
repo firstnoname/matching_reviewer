@@ -7,4 +7,6 @@ class SmeViewEventInitial extends SmeViewEvent {}
 
 class SmeViewEventGetProductList extends SmeViewEvent {}
 
-class SmeViewEventSubmitProduct extends SmeViewEvent {}
+class SmeViewEventSubmitProduct extends SmeViewEvent {
+
+}

@@ -1,8 +1,8 @@
 import 'package:matching_reviewer/models/models.dart';
 
 class Matching {
-  final User entrepreneur;
-  final User reviewer;
+  final User? entrepreneur;
+  final User? reviewer;
   final String productExpertiseCategory;
   final String productExpertiseSubCategory;
   final String? conditions;
@@ -11,8 +11,8 @@ class Matching {
   final String? receiptPath;
 
   Matching(
-      {required this.entrepreneur,
-      required this.reviewer,
+      {this.entrepreneur,
+      this.reviewer,
       required this.productExpertiseCategory,
       required this.productExpertiseSubCategory,
       this.conditions,
@@ -22,8 +22,8 @@ class Matching {
 
   Map<String, dynamic> toMap() {
     return {
-      'entrepreneur': entrepreneur.toMap(),
-      'reviewer': reviewer.toMap(),
+      'entrepreneur': entrepreneur?.toMap(),
+      'reviewer': reviewer?.toMap(),
       'productExpertiseCategory': productExpertiseCategory,
       'productExpertiseSubCategory': productExpertiseSubCategory,
       'conditions': conditions,
