@@ -12,16 +12,21 @@ class MatchingAPI extends BasedAPI {
 
   MatchingAPI._() : super(collectionName: collectionName);
 
-  Future<bool> addMatching(
-      { User? reviewer,
-       User? entrepreneur,
-      required String category,
-      required String subCategory}) async {
+  Future<bool> addMatching({
+    User? reviewer,
+    User? entrepreneur,
+    required String category,
+    required String subCategory,
+    required DateTime appointment,
+    required String conditions,
+  }) async {
     Matching matching = Matching(
         entrepreneur: entrepreneur,
         reviewer: reviewer,
         productExpertiseCategory: category,
-        productExpertiseSubCategory: subCategory);
+        productExpertiseSubCategory: subCategory,
+        appointment: appointment,
+        conditions: conditions);
 
     var response = await collection.add(matching.toMap());
 

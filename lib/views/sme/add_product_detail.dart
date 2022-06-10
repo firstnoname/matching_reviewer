@@ -1,8 +1,12 @@
 import 'dart:typed_data';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:matching_reviewer/blocs/app_manager/bloc/app_manager_bloc.dart';
+import 'package:matching_reviewer/models/models.dart';
 import 'package:matching_reviewer/utilities/image_picker.dart';
+import 'package:matching_reviewer/views/sme/bloc/sme_view_bloc.dart';
 import 'package:matching_reviewer/widgets/widgets.dart';
 
 class AddProductDetail extends StatefulWidget {
@@ -16,6 +20,8 @@ class _AddProductDetailState extends State<AddProductDetail> {
   List<Uint8List> _imagesWidget = [];
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  String _category = '';
+  String _subCategory = '';
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +38,14 @@ class _AddProductDetailState extends State<AddProductDetail> {
                 children: <Widget>[
                   SelectableCategory(
                       onSelectCategory: (String category, String subCategory) {
+                    _category = category;
+                    _subCategory = subCategory;
                     print('category -> $category, sub -> $subCategory');
                   }),
                   _widgetConditionFormField(),
                   _widgetSelectAppointment(),
                   _widgetSelectImageButton(),
-                  _widgetSubmitButton(),
+                  _widgetSubmitButton(context),
                 ],
               ),
             ),
@@ -144,7 +152,7 @@ class _AddProductDetailState extends State<AddProductDetail> {
     );
   }
 
-  Widget _widgetSubmitButton() {
+  Widget _widgetSubmitButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
@@ -153,6 +161,11 @@ class _AddProductDetailState extends State<AddProductDetail> {
           // if (_formKey.currentState.validate()) {
           //   _formKey.currentState.save();
           // }
+          User userInfo = BlocProvider.of<AppManagerBloc>(context).member;
+          context.read<SmeViewBloc>().add(SmeViewEventSubmitProduct(
+              entrepreneur: userInfo,
+              category: _category,
+              subCategory: _subCategory));
         },
       ),
     );
