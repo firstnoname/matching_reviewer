@@ -9,7 +9,7 @@ class SMEView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SmeViewBloc(),
+      create: (context) => SmeViewBloc()..add(SmeViewEventInitial()),
       child: BlocBuilder<SmeViewBloc, SmeViewState>(
         builder: (context, state) {
           return SingleChildScrollView(

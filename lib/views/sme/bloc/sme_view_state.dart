@@ -9,4 +9,8 @@ class SmeViewStateFailure extends SmeViewState {}
 
 class SmeViewStateGetProductListSuccess extends SmeViewState {}
 
-class SmeViewStateSubmitProductSuccess extends SmeViewState {}
+class SmeViewStateSubmitProductSuccess extends SmeViewState {
+  final Matching matchingInfo;
+
+  SmeViewStateSubmitProductSuccess({required this.matchingInfo});
+}

@@ -81,17 +81,19 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
       MatchingEventApproved event, Emitter<MatchingState> emit) async {
     // call api to add matching info
 
-    bool isAddedMatching = await MatchingAPI().addMatching(
+    Matching matchingInfo = Matching(
         reviewer: _selectedRole == UserRoles.reviewer
             ? selectedOptionOne!
             : selectedOptionTwo!,
         entrepreneur: _selectedRole == UserRoles.entrepreneur
             ? selectedOptionOne!
             : selectedOptionTwo!,
-        category: selectedCategory!,
-        subCategory: selectedSubCategory!,
-        appointment: DateTime(1990),
-        conditions: '');
+        productExpertiseCategory: selectedCategory ?? '',
+        productExpertiseSubCategory: selectedSubCategory ?? '',
+        product: Product());
+
+    bool isAddedMatching =
+        await MatchingAPI().addMatching(matchingInfo: matchingInfo);
 
     if (isAddedMatching) {
       emit(MatchingStateApproveSuccess());
