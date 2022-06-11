@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:matching_reviewer/blocs/app_manager/bloc/app_manager_bloc.dart';
+import 'package:matching_reviewer/models/matching.dart';
 import 'package:matching_reviewer/views/sme/bloc/sme_view_bloc.dart';
 import 'package:matching_reviewer/views/views.dart';
 
@@ -8,10 +10,16 @@ class SMEView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Matching> _products = [];
     return BlocProvider(
-      create: (context) => SmeViewBloc()..add(SmeViewEventInitial()),
+      create: (context) =>
+          SmeViewBloc(userID: context.read<AppManagerBloc>().member.id)
+            ..add(SmeViewEventInitial()),
       child: BlocBuilder<SmeViewBloc, SmeViewState>(
         builder: (context, state) {
+          if (state is SmeViewStateGetProductListSuccess) {
+            _products = state.products;
+          }
           return SingleChildScrollView(
             child: Column(
               children: [
@@ -35,15 +43,17 @@ class SMEView extends StatelessWidget {
                   height: MediaQuery.of(context).size.height,
                   child: ListView.builder(
                     shrinkWrap: true,
+                    itemCount: _products.length,
                     itemBuilder: (context, index) => Card(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          const ListTile(
-                            leading: Icon(Icons.album),
-                            title: Text('The Enchanted Nightingale'),
+                          ListTile(
+                            leading: const Icon(Icons.album),
+                            title: Text(
+                                _products[index].product?.productName ?? ''),
                             subtitle: Text(
-                                'Music by Julie Gable. Lyrics by Sidney Stein.'),
+                                _products[index].product?.conditions ?? ''),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,

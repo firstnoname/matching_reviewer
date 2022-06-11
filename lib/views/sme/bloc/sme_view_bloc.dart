@@ -11,14 +11,20 @@ part 'sme_view_event.dart';
 part 'sme_view_state.dart';
 
 class SmeViewBloc extends Bloc<SmeViewEvent, SmeViewState> {
-  SmeViewBloc() : super(SmeViewInitial()) {
+  final String userID;
+  List<Matching> _products = [];
+
+  SmeViewBloc({required this.userID}) : super(SmeViewInitial()) {
     on<SmeViewEventInitial>(_onInitial);
     on<SmeViewEventGetProductList>(_onGetProductList);
     on<SmeViewEventSubmitProduct>(_onSubmitProduct);
   }
 
-  FutureOr<void> _onInitial(SmeViewEvent event, Emitter<SmeViewState> emit) {
-    print('SmeViewBloc init');
+  Future<FutureOr<void>> _onInitial(
+      SmeViewEvent event, Emitter<SmeViewState> emit) async {
+    _products = await MatchingAPI().getMatchingList(userId: userID);
+
+    emit(SmeViewStateGetProductListSuccess(products: _products));
   }
 
   FutureOr<void> _onGetProductList(
@@ -37,7 +43,8 @@ class SmeViewBloc extends Bloc<SmeViewEvent, SmeViewState> {
         await MatchingAPI().addMatching(matchingInfo: matchingInfo);
 
     if (isAddedMatching) {
-      emit(SmeViewStateSubmitProductSuccess(matchingInfo: matchingInfo));
+      _products.add(matchingInfo);
+      emit(SmeViewStateGetProductListSuccess(products: _products));
     } else {
       emit(SmeViewStateFailure());
     }

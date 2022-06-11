@@ -3,8 +3,8 @@ import 'package:matching_reviewer/models/models.dart';
 class Matching {
   final User? entrepreneur;
   final User? reviewer;
-  final String productExpertiseCategory;
-  final String productExpertiseSubCategory;
+  final String? productExpertiseCategory;
+  final String? productExpertiseSubCategory;
   final List<String?>? productPicsPath;
   final String? receiptPath;
   final Product? product;
@@ -12,8 +12,8 @@ class Matching {
   Matching(
       {this.entrepreneur,
       this.reviewer,
-      required this.productExpertiseCategory,
-      required this.productExpertiseSubCategory,
+      this.productExpertiseCategory,
+      this.productExpertiseSubCategory,
       this.productPicsPath,
       this.receiptPath,
       this.product});
@@ -32,13 +32,15 @@ class Matching {
 
   factory Matching.fromMap(Map<String, dynamic> map) {
     return Matching(
-      entrepreneur: User.fromMap(map['entrepreneur']),
-      reviewer: User.fromMap(map['reviewer']),
-      productExpertiseCategory: map['productExpertiseCategory'],
-      productExpertiseSubCategory: map['productExpertiseSubCategory'],
-      productPicsPath: map['productPicsPath'],
+      entrepreneur: map['entrepreneur'] != null
+          ? User.fromMap(map['entrepreneur'])
+          : null,
+      reviewer: map['reviewer'] != null ? User.fromMap(map['reviewer']) : null,
+      productExpertiseCategory: map['productExpertiseCategory'] ?? '',
+      productExpertiseSubCategory: map['productExpertiseSubCategory'] ?? '',
+      productPicsPath: map['productPicsPath'] ?? [],
       receiptPath: map['receiptPath'],
-      product: Product.fromMap(map['product']),
+      product: map['product'] != null ? Product.fromMap(map['product']) : null,
     );
   }
 }

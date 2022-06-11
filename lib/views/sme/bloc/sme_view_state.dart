@@ -7,10 +7,8 @@ class SmeViewInitial extends SmeViewState {}
 
 class SmeViewStateFailure extends SmeViewState {}
 
-class SmeViewStateGetProductListSuccess extends SmeViewState {}
+class SmeViewStateGetProductListSuccess extends SmeViewState {
+  final List<Matching> products;
 
-class SmeViewStateSubmitProductSuccess extends SmeViewState {
-  final Matching matchingInfo;
-
-  SmeViewStateSubmitProductSuccess({required this.matchingInfo});
+  SmeViewStateGetProductListSuccess({required this.products});
 }
