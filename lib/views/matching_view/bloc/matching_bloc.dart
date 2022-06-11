@@ -21,11 +21,15 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   User get optionTwo => selectedOptionTwo!;
 
   MatchingBloc() : super(MatchingInitial()) {
-    on<MatchingEventSelectedRole>(_onSelectedRole);
-    on<MatchingSelectedCategory>(_onSelectedCategory);
-    on<MatchingEventSelectOptionOne>(_onSelectedOptionOne);
-    on<MatchingEventSelectOptionTwo>(_onSelectedOptionTwo);
-    on<MatchingEventApproved>(_onSelectedApprove);
+    try {
+      on<MatchingEventSelectedRole>(_onSelectedRole);
+      on<MatchingSelectedCategory>(_onSelectedCategory);
+      on<MatchingEventSelectOptionOne>(_onSelectedOptionOne);
+      on<MatchingEventSelectOptionTwo>(_onSelectedOptionTwo);
+      on<MatchingEventApproved>(_onSelectedApprove);
+    } catch (e) {
+      print('error on MatchingBLoC. value -> ${e.toString()}');
+    }
   }
 
   Future<FutureOr<void>> _onSelectedRole(
@@ -85,7 +89,9 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
             ? selectedOptionOne!
             : selectedOptionTwo!,
         category: selectedCategory!,
-        subCategory: selectedSubCategory!);
+        subCategory: selectedSubCategory!,
+        appointment: DateTime(1990),
+        conditions: '');
 
     if (isAddedMatching) {
       emit(MatchingStateApproveSuccess());

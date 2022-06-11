@@ -22,6 +22,7 @@ class _AddProductDetailState extends State<AddProductDetail> {
   TimeOfDay selectedTime = TimeOfDay.now();
   String _category = '';
   String _subCategory = '';
+  final _conditionText = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,9 @@ class _AddProductDetailState extends State<AddProductDetail> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(
+        controller: _conditionText,
         decoration: const InputDecoration(hintText: 'Conditions'),
+        onSaved: (value) {},
       ),
     );
   }
@@ -165,7 +168,9 @@ class _AddProductDetailState extends State<AddProductDetail> {
           context.read<SmeViewBloc>().add(SmeViewEventSubmitProduct(
               entrepreneur: userInfo,
               category: _category,
-              subCategory: _subCategory));
+              subCategory: _subCategory,
+              conditions: _conditionText.text,
+              appointment: selectedDate));
         },
       ),
     );
