@@ -23,6 +23,7 @@ class _AddProductDetailState extends State<AddProductDetail> {
   String _category = '';
   String _subCategory = '';
   final _conditionText = TextEditingController();
+  final _prodName = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +44,7 @@ class _AddProductDetailState extends State<AddProductDetail> {
                     _subCategory = subCategory;
                     print('category -> $category, sub -> $subCategory');
                   }),
+                  _widgetProductNameFormField(),
                   _widgetConditionFormField(),
                   _widgetSelectAppointment(),
                   _widgetSelectImageButton(),
@@ -71,6 +73,17 @@ class _AddProductDetailState extends State<AddProductDetail> {
             backgroundColor: Colors.red,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _widgetProductNameFormField() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        controller: _prodName,
+        decoration: const InputDecoration(hintText: 'Product name'),
+        onSaved: (value) {},
       ),
     );
   }
@@ -170,7 +183,9 @@ class _AddProductDetailState extends State<AddProductDetail> {
               category: _category,
               subCategory: _subCategory,
               conditions: _conditionText.text,
-              appointment: selectedDate));
+              appointment: selectedDate,
+              prodName: _prodName.text,
+              images: _imagesWidget));
         },
       ),
     );
@@ -196,8 +211,8 @@ class _AddProductDetailState extends State<AddProductDetail> {
       if (pickedTime != null && pickedTime != selectedTime) {
         setState(() {
           selectedDate = DateTime(selectedDate.year, selectedDate.month,
-              selectedDate.day, selectedTime.hour, selectedTime.minute);
-          selectedTime = pickedTime;
+              selectedDate.day, pickedTime.hour, pickedTime.minute);
+          // selectedTime = pickedTime;
         });
       }
     }

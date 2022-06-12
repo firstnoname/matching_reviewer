@@ -37,7 +37,10 @@ class SmeViewBloc extends Bloc<SmeViewEvent, SmeViewState> {
         productExpertiseCategory: event.category,
         productExpertiseSubCategory: event.subCategory,
         product: Product(
-            appointment: event.appointment, conditions: event.conditions));
+            productName: event.prodName,
+            appointment: event.appointment,
+            conditions: event.conditions,
+            pictures: event.images));
 
     bool isAddedMatching =
         await MatchingAPI().addMatching(matchingInfo: matchingInfo);

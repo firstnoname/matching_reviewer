@@ -13,11 +13,15 @@ class SmeViewEventSubmitProduct extends SmeViewEvent {
   final String subCategory;
   final DateTime appointment;
   final String conditions;
+  final String prodName;
+  final List? images;
 
   SmeViewEventSubmitProduct(
       {required this.entrepreneur,
       required this.category,
       required this.subCategory,
       required this.appointment,
-      required this.conditions});
+      required this.conditions,
+      required this.prodName,
+      this.images});
 }

@@ -4,7 +4,7 @@ class Product {
   final String? productName;
   final String? conditions;
   final DateTime? appointment;
-  final List? pictures;
+  List? pictures;
 
   Product({this.productName, this.conditions, this.appointment, this.pictures});
 
@@ -13,6 +13,7 @@ class Product {
       'productName': productName,
       'conditions': conditions,
       'appointment': appointment,
+      // 'pictures': pictures?.map((e) => e.toString()),
     };
   }
 
@@ -21,6 +22,7 @@ class Product {
       productName: map['productName'],
       conditions: map['conditions'],
       appointment: (map['appointment'] as Timestamp).toDate(),
+      pictures: map['pictures'],
     );
   }
 }
