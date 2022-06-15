@@ -24,8 +24,7 @@ class MatchingView extends StatelessWidget {
               } else if (state is MatchingSelectRoleSuccess) {
                 return _selectCategory(context);
               } else if (state is MatchingStateGetOptionsOneSuccess) {
-                return _listBuilderOptionOne(
-                    role: state.role, users: state.users);
+                return _listBuilderOptionOne(products: state.products);
               } else if (state is MatchingStateSelectOptionOneSuccess) {
                 return _listBuilderOptionTwo(users: state.userList);
               } else {
@@ -233,19 +232,21 @@ class MatchingView extends StatelessWidget {
     );
   }
 
-  Widget _listBuilderOptionOne(
-      {required UserRoles role, required List<User> users}) {
+  Widget _listBuilderOptionOne({required List<Matching> products}) {
     return Column(
       children: [
-        const Text('Select SME'),
+        const Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text('Select Entrepreneur'),
+        ),
         ListView.builder(
           shrinkWrap: true,
-          itemCount: users.length,
+          itemCount: products.length,
           itemBuilder: (context, index) => GestureDetector(
             onTap: () => context
                 .read<MatchingBloc>()
-                .add(MatchingEventSelectOptionOne(optionOne: users[index])),
-            child: UserCardWidget(userInfo: users[index]),
+                .add(MatchingEventSelectOptionOne(matching: products[index])),
+            child: UserCardWidget(matchingInfo: products[index]),
           ),
         ),
       ],

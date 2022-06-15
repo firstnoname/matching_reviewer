@@ -13,7 +13,7 @@ class Product {
       'productName': productName,
       'conditions': conditions,
       'appointment': appointment,
-      // 'pictures': pictures?.map((e) => e.toString()),
+      'pictures': pictures?.map((e) => e.toString()),
     };
   }
 

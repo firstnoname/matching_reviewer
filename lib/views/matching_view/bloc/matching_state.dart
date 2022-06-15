@@ -10,10 +10,9 @@ class MatchingStateFailure extends MatchingState {}
 class MatchingSelectRoleSuccess extends MatchingState {}
 
 class MatchingStateGetOptionsOneSuccess extends MatchingState {
-  final UserRoles role;
-  final List<User> users;
+  final List<Matching> products;
 
-  MatchingStateGetOptionsOneSuccess({required this.role, required this.users});
+  MatchingStateGetOptionsOneSuccess({required this.products});
 }
 
 class MatchingStateSelectOptionOneSuccess extends MatchingState {

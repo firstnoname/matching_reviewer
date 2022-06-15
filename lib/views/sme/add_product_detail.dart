@@ -24,37 +24,46 @@ class _AddProductDetailState extends State<AddProductDetail> {
   String _subCategory = '';
   final _conditionText = TextEditingController();
   final _prodName = TextEditingController();
+  bool _isZoomSelected = true;
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: Stack(
-        overflow: Overflow.visible,
-        children: <Widget>[
-          _widgetCloseButton(),
-          Form(
-            // key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  SelectableCategory(
-                      onSelectCategory: (String category, String subCategory) {
-                    _category = category;
-                    _subCategory = subCategory;
-                    print('category -> $category, sub -> $subCategory');
-                  }),
-                  _widgetProductNameFormField(),
-                  _widgetConditionFormField(),
-                  _widgetSelectAppointment(),
-                  _widgetSelectImageButton(),
-                  _widgetSubmitButton(context),
-                ],
+    return BlocBuilder<SmeViewBloc, SmeViewState>(
+      builder: (context, state) {
+        if (state is SmeViewStateSubmitSuccess) {
+          Navigator.pop(context);
+        }
+        return AlertDialog(
+          content: Stack(
+            // overflow: Overflow.visible,
+            children: <Widget>[
+              _widgetCloseButton(),
+              Form(
+                // key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      SelectableCategory(onSelectCategory:
+                          (String category, String subCategory) {
+                        _category = category;
+                        _subCategory = subCategory;
+                        print('category -> $category, sub -> $subCategory');
+                      }),
+                      _widgetProductNameFormField(),
+                      _widgetConditionFormField(),
+                      _widgetSelectAppointment(),
+                      _widgetSelectImageButton(),
+                      _widgetReviewOptions(),
+                      _widgetSubmitButton(context),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -109,7 +118,7 @@ class _AddProductDetailState extends State<AddProductDetail> {
       },
       child: _imagesWidget.isNotEmpty
           ? Container(
-              width: MediaQuery.of(context).size.width / 4,
+              width: MediaQuery.of(context).size.width,
               height: 400,
               margin: const EdgeInsets.all(15.0),
               padding: const EdgeInsets.all(3.0),
@@ -168,29 +177,6 @@ class _AddProductDetailState extends State<AddProductDetail> {
     );
   }
 
-  Widget _widgetSubmitButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
-        child: const Text("Submit"),
-        onPressed: () {
-          // if (_formKey.currentState.validate()) {
-          //   _formKey.currentState.save();
-          // }
-          User userInfo = BlocProvider.of<AppManagerBloc>(context).member;
-          context.read<SmeViewBloc>().add(SmeViewEventSubmitProduct(
-              entrepreneur: userInfo,
-              category: _category,
-              subCategory: _subCategory,
-              conditions: _conditionText.text,
-              appointment: selectedDate,
-              prodName: _prodName.text,
-              images: _imagesWidget));
-        },
-      ),
-    );
-  }
-
   _widgetSelectAppointment() {
     Future<void> _selectDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
@@ -227,6 +213,61 @@ class _AddProductDetailState extends State<AddProductDetail> {
         TextButton(
             child: const Text('Select time.'), onPressed: () => _selectTime()),
       ],
+    );
+  }
+
+  Widget _widgetReviewOptions() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          const Text('Select review method : '),
+          ChoiceChip(
+            label: const Text("Zoom discussion (30,000 Baht)"),
+            selected: _isZoomSelected,
+            onSelected: (bool value) {
+              setState(() {
+                _isZoomSelected = !_isZoomSelected;
+              });
+            },
+            selectedColor: Colors.green,
+          ),
+          const SizedBox(width: 8),
+          ChoiceChip(
+            label: const Text("Review by only reviewer (15,000 Baht)"),
+            selected: !_isZoomSelected,
+            onSelected: (bool value) {
+              setState(() {
+                _isZoomSelected = !_isZoomSelected;
+              });
+            },
+            selectedColor: Colors.green,
+          ),
+          const SizedBox(width: 16),
+          const Text('** กรุณาชำระเงินก่อนส่งแบบฟอร์ม',
+              style: TextStyle(color: Colors.red)),
+        ],
+      ),
+    );
+  }
+
+  Widget _widgetSubmitButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        child: const Text("Submit"),
+        onPressed: () {
+          User userInfo = BlocProvider.of<AppManagerBloc>(context).member;
+          context.read<SmeViewBloc>().add(SmeViewEventSubmitProduct(
+              entrepreneur: userInfo,
+              category: _category,
+              subCategory: _subCategory,
+              conditions: _conditionText.text,
+              appointment: selectedDate,
+              prodName: _prodName.text,
+              images: _imagesWidget));
+        },
+      ),
     );
   }
 }

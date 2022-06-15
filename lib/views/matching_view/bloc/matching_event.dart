@@ -18,9 +18,9 @@ class MatchingSelectedCategory extends MatchingEvent {
 }
 
 class MatchingEventSelectOptionOne extends MatchingEvent {
-  final User optionOne;
+  final Matching matching;
 
-  MatchingEventSelectOptionOne({required this.optionOne});
+  MatchingEventSelectOptionOne({required this.matching});
 }
 
 class MatchingEventSelectOptionTwo extends MatchingEvent {

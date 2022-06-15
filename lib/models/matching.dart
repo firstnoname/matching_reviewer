@@ -1,8 +1,9 @@
 import 'package:matching_reviewer/models/models.dart';
 
 class Matching {
+  String? id;
   final User? entrepreneur;
-  final User? reviewer;
+  User? reviewer;
   final String? productExpertiseCategory;
   final String? productExpertiseSubCategory;
   final List<String?>? productPicsPath;
@@ -10,7 +11,8 @@ class Matching {
   final Product? product;
 
   Matching(
-      {this.entrepreneur,
+      {this.id,
+      this.entrepreneur,
       this.reviewer,
       this.productExpertiseCategory,
       this.productExpertiseSubCategory,
@@ -32,6 +34,7 @@ class Matching {
 
   factory Matching.fromMap(Map<String, dynamic> map) {
     return Matching(
+      id: map['id'],
       entrepreneur: map['entrepreneur'] != null
           ? User.fromMap(map['entrepreneur'])
           : null,

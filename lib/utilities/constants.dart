@@ -1,1 +1,2 @@
-const String productPathOnFireStore = 'profile_users/';
+const String productPathOnFireStore = 'product/';
+const String userProfilepathOnFireStore = 'profile_users/';

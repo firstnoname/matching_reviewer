@@ -13,7 +13,7 @@ class SMEView extends StatelessWidget {
     List<Matching> _products = [];
     return BlocProvider(
       create: (context) =>
-          SmeViewBloc(userID: context.read<AppManagerBloc>().member.id)
+          SmeViewBloc(userID: context.read<AppManagerBloc>( ).member.id)
             ..add(SmeViewEventInitial()),
       child: BlocBuilder<SmeViewBloc, SmeViewState>(
         builder: (context, state) {
@@ -49,7 +49,24 @@ class SMEView extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           ListTile(
-                            leading: const Icon(Icons.album),
+                            leading: _products[index]
+                                        .product
+                                        ?.pictures
+                                        ?.first !=
+                                    null
+                                ? CircleAvatar(
+                                    radius: (100),
+                                    backgroundColor: Colors.white,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: Image.network(
+                                          _products[index]
+                                              .product
+                                              ?.pictures
+                                              ?.first,
+                                          fit: BoxFit.contain),
+                                    ))
+                                : Container(),
                             title: Text(
                                 _products[index].product?.productName ?? ''),
                             subtitle: Text(

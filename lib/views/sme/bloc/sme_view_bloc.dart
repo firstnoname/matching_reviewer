@@ -42,11 +42,11 @@ class SmeViewBloc extends Bloc<SmeViewEvent, SmeViewState> {
             conditions: event.conditions,
             pictures: event.images));
 
-    bool isAddedMatching =
-        await MatchingAPI().addMatching(matchingInfo: matchingInfo);
+    matchingInfo = await MatchingAPI().addMatching(matchingInfo: matchingInfo);
 
-    if (isAddedMatching) {
+    if (matchingInfo.id != null) {
       _products.add(matchingInfo);
+      emit(SmeViewStateSubmitSuccess());
       emit(SmeViewStateGetProductListSuccess(products: _products));
     } else {
       emit(SmeViewStateFailure());

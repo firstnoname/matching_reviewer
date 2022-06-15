@@ -12,3 +12,5 @@ class SmeViewStateGetProductListSuccess extends SmeViewState {
 
   SmeViewStateGetProductListSuccess({required this.products});
 }
+
+class SmeViewStateSubmitSuccess extends SmeViewState {}

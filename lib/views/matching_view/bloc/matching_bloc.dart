@@ -15,6 +15,7 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   String? selectedSubCategory;
   User? selectedOptionOne;
   User? selectedOptionTwo;
+  late Matching _matchingInfo;
 
   User get optionOne => selectedOptionOne!;
 
@@ -42,27 +43,32 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
       MatchingSelectedCategory event, Emitter<MatchingState> emit) async {
     selectedCategory = event.selectedCategory;
     selectedSubCategory = event.selectedSubCategory;
-    // get user list (entrepreneur or reviewer).
-    List<User> _users = [];
 
-    _users = await UserAPI().getUsers(
-        userRole: _selectedRole?.name,
-        category: event.selectedCategory,
-        subCategory: event.selectedSubCategory);
-    emit(MatchingStateGetOptionsOneSuccess(
-        role: _selectedRole ?? UserRoles.entrepreneur, users: _users));
+    List<Matching> _products = [];
+    _products = await MatchingAPI()
+        .getMatchingByCategory(subCategory: event.selectedSubCategory);
+    emit(MatchingStateGetOptionsOneSuccess(products: _products));
+
+    // get user list (entrepreneur or reviewer).
+    // List<User> _users = [];
+    //
+    // _users = await UserAPI().getUsers(
+    //     userRole: _selectedRole?.name,
+    //     category: event.selectedCategory,
+    //     subCategory: event.selectedSubCategory);
+    // emit(MatchingStateGetOptionsOneSuccess(
+    //     role: _selectedRole ?? UserRoles.entrepreneur, users: _users));
   }
 
   Future<FutureOr<void>> _onSelectedOptionOne(
       MatchingEventSelectOptionOne event, Emitter<MatchingState> emit) async {
-    selectedOptionOne = event.optionOne;
+    selectedOptionOne = event.matching.entrepreneur;
+    _matchingInfo = event.matching;
 
     // get user for options two.
     List<User> _users = [];
     _users = await UserAPI().getUsers(
-        userRole: _selectedRole?.name == UserRoles.entrepreneur.name
-            ? UserRoles.reviewer.name
-            : UserRoles.entrepreneur.name,
+        userRole: UserRoles.reviewer.name,
         category: selectedCategory,
         subCategory: selectedSubCategory);
 
@@ -74,6 +80,7 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   FutureOr<void> _onSelectedOptionTwo(
       MatchingEventSelectOptionTwo event, Emitter<MatchingState> emit) {
     selectedOptionTwo = event.optionTwo;
+    _matchingInfo.reviewer = event.optionTwo;
     // emit(MatchingStateSelectOptionTwoSuccess());
   }
 
@@ -81,19 +88,22 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
       MatchingEventApproved event, Emitter<MatchingState> emit) async {
     // call api to add matching info
 
-    Matching matchingInfo = Matching(
-        reviewer: _selectedRole == UserRoles.reviewer
-            ? selectedOptionOne!
-            : selectedOptionTwo!,
-        entrepreneur: _selectedRole == UserRoles.entrepreneur
-            ? selectedOptionOne!
-            : selectedOptionTwo!,
-        productExpertiseCategory: selectedCategory ?? '',
-        productExpertiseSubCategory: selectedSubCategory ?? '',
-        product: Product());
+    // Matching matchingInfo = Matching(
+    //     reviewer: _selectedRole == UserRoles.reviewer
+    //         ? selectedOptionOne!
+    //         : selectedOptionTwo!,
+    //     entrepreneur: _selectedRole == UserRoles.entrepreneur
+    //         ? selectedOptionOne!
+    //         : selectedOptionTwo!,
+    //     productExpertiseCategory: selectedCategory ?? '',
+    //     productExpertiseSubCategory: selectedSubCategory ?? '',
+    //     product: Product());
+
+    // bool isAddedMatching =
+    //     await MatchingAPI().addMatching(matchingInfo: _matchingInfo);
 
     bool isAddedMatching =
-        await MatchingAPI().addMatching(matchingInfo: matchingInfo);
+        await MatchingAPI().updateMatchingInfo(matchingInfo: _matchingInfo);
 
     if (isAddedMatching) {
       emit(MatchingStateApproveSuccess());

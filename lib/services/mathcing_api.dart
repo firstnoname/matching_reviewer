@@ -17,39 +17,50 @@ class MatchingAPI extends BasedAPI {
 
   MatchingAPI._() : super(collectionName: collectionName);
 
-  Future<bool> addMatching({required Matching matchingInfo}) async {
-    List? imagesObject = matchingInfo.product?.pictures;
+  Future<Matching> addMatching({required Matching matchingInfo}) async {
+    bool _isSuccess = false;
+    List<Uint8List>? imagesObject =
+        matchingInfo.product?.pictures as List<Uint8List>;
     matchingInfo.product?.pictures = [];
     List<String> imagesPathOnFireStore = [];
     var response = await collection.add(matchingInfo.toMap()).catchError((e) {
       print('add matching info failure. code -> $e');
-    });
+    }).then((value) => matchingInfo.id = value.id);
 
     // upload image by id from firebase.
-    if (imagesObject!.isNotEmpty) {
+    if (imagesObject.isNotEmpty) {
       print('upload image');
-      imagesObject.map((image) async {
+      for (var image in imagesObject) {
         String? _uploadedPath = await ImageApi()
             .uploadFile(image,
-                '$productPathOnFireStore${matchingInfo.entrepreneur!.id}')
+                '$productPathOnFireStore${matchingInfo.entrepreneur!.id}_${imagesObject.indexOf(image)}')
             .catchError((error) {
           print('upload image error in matching_api.dart with msg -> $error');
         });
         if (_uploadedPath.isNotEmpty) {
           imagesPathOnFireStore.add(_uploadedPath);
         }
-      });
+      }
     }
 
     // update product info on firebase.
     if (imagesPathOnFireStore.isNotEmpty) {
       await collection
-          .doc(response.id)
+          .doc(matchingInfo.id)
           .update({'product.pictures': imagesPathOnFireStore});
+      _isSuccess = true;
     }
 
-    print('response -> $response');
-    return false;
+    return matchingInfo;
+  }
+
+  Future<bool> updateMatchingInfo({required Matching matchingInfo}) async {
+    bool isUpdateSuccess = await collection
+        .doc(matchingInfo.id)
+        .update({'reviewer': matchingInfo.reviewer?.toMap()})
+        .then((value) => true)
+        .catchError((error) => false);
+    return isUpdateSuccess;
   }
 
   Future<List<Matching>> getMatchingList({required String userId}) async {
@@ -64,5 +75,19 @@ class MatchingAPI extends BasedAPI {
           .toList();
     }
     return _list;
+  }
+
+  Future<List<Matching>> getMatchingByCategory(
+      {required String subCategory}) async {
+    List<Matching> _products = [];
+    var response = await collection
+        .where('productExpertiseSubCategory', isEqualTo: subCategory)
+        .get();
+
+    _products = response.docs
+        .map((prod) => Matching.fromMap(prod.data()..addAll({'id': prod.id})))
+        .toList();
+
+    return _products;
   }
 }
