@@ -6,9 +6,8 @@ class Matching {
   User? reviewer;
   final String? productExpertiseCategory;
   final String? productExpertiseSubCategory;
-  final List<String?>? productPicsPath;
-  final String? receiptPath;
   final Product? product;
+  final Payment? payment;
 
   Matching(
       {this.id,
@@ -16,9 +15,8 @@ class Matching {
       this.reviewer,
       this.productExpertiseCategory,
       this.productExpertiseSubCategory,
-      this.productPicsPath,
-      this.receiptPath,
-      this.product});
+      this.product,
+      this.payment});
 
   Map<String, dynamic> toMap() {
     return {
@@ -26,9 +24,8 @@ class Matching {
       'reviewer': reviewer?.toMap(),
       'productExpertiseCategory': productExpertiseCategory,
       'productExpertiseSubCategory': productExpertiseSubCategory,
-      'productPicsPath': productPicsPath,
-      'receiptPath': receiptPath,
       'product': product?.toMap(),
+      'payment': payment?.toMap(),
     };
   }
 
@@ -41,9 +38,8 @@ class Matching {
       reviewer: map['reviewer'] != null ? User.fromMap(map['reviewer']) : null,
       productExpertiseCategory: map['productExpertiseCategory'] ?? '',
       productExpertiseSubCategory: map['productExpertiseSubCategory'] ?? '',
-      productPicsPath: map['productPicsPath'] ?? [],
-      receiptPath: map['receiptPath'],
       product: map['product'] != null ? Product.fromMap(map['product']) : null,
+      payment: map['payment'] != null ? Payment.fromMap(map['payment']) : null,
     );
   }
 }

@@ -13,7 +13,7 @@ class SMEView extends StatelessWidget {
     List<Matching> _products = [];
     return BlocProvider(
       create: (context) =>
-          SmeViewBloc(userID: context.read<AppManagerBloc>( ).member.id)
+          SmeViewBloc(userID: context.read<AppManagerBloc>().member.id)
             ..add(SmeViewEventInitial()),
       child: BlocBuilder<SmeViewBloc, SmeViewState>(
         builder: (context, state) {
@@ -50,10 +50,9 @@ class SMEView extends StatelessWidget {
                         children: <Widget>[
                           ListTile(
                             leading: _products[index]
-                                        .product
-                                        ?.pictures
-                                        ?.first !=
-                                    null
+                                    .product!
+                                    .pictures!
+                                    .isNotEmpty
                                 ? CircleAvatar(
                                     radius: (100),
                                     backgroundColor: Colors.white,
@@ -66,7 +65,10 @@ class SMEView extends StatelessWidget {
                                               ?.first,
                                           fit: BoxFit.contain),
                                     ))
-                                : Container(),
+                                : const SizedBox(
+                                    width: 10,
+                                    height: 10,
+                                  ),
                             title: Text(
                                 _products[index].product?.productName ?? ''),
                             subtitle: Text(
@@ -77,9 +79,8 @@ class SMEView extends StatelessWidget {
                             children: <Widget>[
                               TextButton(
                                 child: const Text('Details'),
-                                onPressed: () {
-                                  /* ... */
-                                },
+                                onPressed: () => _productDetail(context,
+                                    productDetail: _products[index]),
                               ),
                               const SizedBox(width: 8),
                             ],
@@ -95,5 +96,16 @@ class SMEView extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future _productDetail(BuildContext context,
+      {required Matching productDetail}) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Image.network(productDetail.product?.pictures?.first),
+          );
+        });
   }
 }

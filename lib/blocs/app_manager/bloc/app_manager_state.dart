@@ -7,7 +7,7 @@ class AppManagerInitial extends AppManagerState {}
 
 class AppManagerStateFailure extends AppManagerState {}
 
-class AppManagerStateUnauthenticate extends AppManagerState {}
+class AppManagerStateUnAuthenticate extends AppManagerState {}
 
 class AppManagerStateAuthenticated extends AppManagerState {}
 

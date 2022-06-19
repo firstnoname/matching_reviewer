@@ -3,6 +3,8 @@ part of 'matching_bloc.dart';
 @immutable
 abstract class MatchingEvent {}
 
+class MatchingEventInitial extends MatchingEvent {}
+
 class MatchingEventSelectedRole extends MatchingEvent {
   final UserRoles selectedRole;
 

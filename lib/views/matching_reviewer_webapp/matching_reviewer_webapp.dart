@@ -20,6 +20,7 @@ class MatchingReviewerWebApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: appThemes(context),
+        builder: UIFeedback.init(),
         home: Builder(builder: (context) {
           return StreamBuilder<User?>(
             // stream: FirebaseAuth.instance.authStateChanges(),

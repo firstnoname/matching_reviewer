@@ -5,3 +5,4 @@ export 'questionnaire.dart';
 export 'product_expertise.dart';
 export 'matching.dart';
 export 'product.dart';
+export 'payment.dart';

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:matching_reviewer/models/models.dart';
 import 'package:matching_reviewer/services/services.dart';
 import 'package:meta/meta.dart';
@@ -23,14 +24,20 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
 
   MatchingBloc() : super(MatchingInitial()) {
     try {
+      on<MatchingEventInitial>(_onInit);
       on<MatchingEventSelectedRole>(_onSelectedRole);
       on<MatchingSelectedCategory>(_onSelectedCategory);
       on<MatchingEventSelectOptionOne>(_onSelectedOptionOne);
       on<MatchingEventSelectOptionTwo>(_onSelectedOptionTwo);
       on<MatchingEventApproved>(_onSelectedApprove);
     } catch (e) {
-      print('error on MatchingBLoC. value -> ${e.toString()}');
+      debugPrint('error on MatchingBLoC. value -> ${e.toString()}');
     }
+  }
+
+  FutureOr<void> _onInit(
+      MatchingEventInitial event, Emitter<MatchingState> emit) {
+    // List<Matching> _
   }
 
   Future<FutureOr<void>> _onSelectedRole(
@@ -72,7 +79,7 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
         category: selectedCategory,
         subCategory: selectedSubCategory);
 
-    print('user for options two -> ${_users.length}');
+    debugPrint('user for options two -> ${_users.length}');
 
     emit(MatchingStateSelectOptionOneSuccess(userList: _users));
   }

@@ -25,6 +25,7 @@ class _AddProductDetailState extends State<AddProductDetail> {
   final _conditionText = TextEditingController();
   final _prodName = TextEditingController();
   bool _isZoomSelected = true;
+  Uint8List? _slipTransfer;
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +36,9 @@ class _AddProductDetailState extends State<AddProductDetail> {
         }
         return AlertDialog(
           content: Stack(
-            // overflow: Overflow.visible,
             children: <Widget>[
               _widgetCloseButton(),
               Form(
-                // key: _formKey,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -48,14 +47,16 @@ class _AddProductDetailState extends State<AddProductDetail> {
                           (String category, String subCategory) {
                         _category = category;
                         _subCategory = subCategory;
-                        print('category -> $category, sub -> $subCategory');
+                        debugPrint('category -> $category, sub -> $subCategory');
                       }),
                       _widgetProductNameFormField(),
                       _widgetConditionFormField(),
                       _widgetSelectAppointment(),
                       _widgetSelectImageButton(),
                       _widgetReviewOptions(),
-                      _widgetSubmitButton(context),
+                      _slipTransfer == null
+                          ? Container()
+                          : _widgetSubmitButton(context),
                     ],
                   ),
                 ),
@@ -111,15 +112,14 @@ class _AddProductDetailState extends State<AddProductDetail> {
   Widget _widgetSelectImageButton() {
     return GestureDetector(
       onTap: () async {
-        // await getMultiImagesBytes();
-        // setState(() {});
-        _imagesWidget = await ImagePicker().getMultiImagesBytes(context);
+        _imagesWidget =
+            await ImagePicker().getMultiImagesBytes(context, maxImages: 5);
         setState(() {});
       },
       child: _imagesWidget.isNotEmpty
           ? Container(
               width: MediaQuery.of(context).size.width,
-              height: 400,
+              height: 300,
               margin: const EdgeInsets.all(15.0),
               padding: const EdgeInsets.all(3.0),
               decoration: BoxDecoration(
@@ -128,7 +128,7 @@ class _AddProductDetailState extends State<AddProductDetail> {
                 ),
               ),
               child: GridView.count(
-                crossAxisCount: 2,
+                crossAxisCount: 4,
                 children: List.generate(
                   _imagesWidget.length,
                   (index) => Container(
@@ -137,6 +137,8 @@ class _AddProductDetailState extends State<AddProductDetail> {
                             padding: const EdgeInsets.all(8.0),
                             child: Image.memory(
                               _imagesWidget[index],
+                              width: 20,
+                              height: 20,
                             ),
                           )
                         : Container(
@@ -164,8 +166,8 @@ class _AddProductDetailState extends State<AddProductDetail> {
                   color: Colors.grey,
                 ),
               ),
-              width: MediaQuery.of(context).size.width / 4,
-              height: 400,
+              width: MediaQuery.of(context).size.width,
+              height: 200,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -219,33 +221,56 @@ class _AddProductDetailState extends State<AddProductDetail> {
   Widget _widgetReviewOptions() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
+      child: Column(
         children: [
-          const Text('Select review method : '),
-          ChoiceChip(
-            label: const Text("Zoom discussion (30,000 Baht)"),
-            selected: _isZoomSelected,
-            onSelected: (bool value) {
-              setState(() {
-                _isZoomSelected = !_isZoomSelected;
-              });
-            },
-            selectedColor: Colors.green,
+          Row(
+            children: [
+              const Text('Select review method : '),
+              ChoiceChip(
+                label: const Text("Zoom discussion (30,000 Baht)"),
+                selected: _isZoomSelected,
+                onSelected: (bool value) {
+                  setState(() {
+                    _isZoomSelected = !_isZoomSelected;
+                  });
+                },
+                selectedColor: Colors.green,
+              ),
+              const SizedBox(width: 8),
+              ChoiceChip(
+                label: const Text("Review by only reviewer (15,000 Baht)"),
+                selected: !_isZoomSelected,
+                onSelected: (bool value) {
+                  setState(() {
+                    _isZoomSelected = !_isZoomSelected;
+                  });
+                },
+                selectedColor: Colors.green,
+              ),
+              const SizedBox(width: 16),
+              const Text('** กรุณาชำระเงินก่อนส่งแบบฟอร์ม',
+                  style: TextStyle(color: Colors.red)),
+            ],
           ),
-          const SizedBox(width: 8),
-          ChoiceChip(
-            label: const Text("Review by only reviewer (15,000 Baht)"),
-            selected: !_isZoomSelected,
-            onSelected: (bool value) {
-              setState(() {
-                _isZoomSelected = !_isZoomSelected;
-              });
-            },
-            selectedColor: Colors.green,
-          ),
-          const SizedBox(width: 16),
-          const Text('** กรุณาชำระเงินก่อนส่งแบบฟอร์ม',
-              style: TextStyle(color: Colors.red)),
+          Row(
+            children: [
+              const Text('อัพโหลดสลิปการโอนเงิน: '),
+              _slipTransfer == null
+                  ? Container()
+                  : Image.memory(
+                      _slipTransfer!,
+                      width: 150,
+                      height: 150,
+                    ),
+              TextButton(
+                child: const Text('Choose file'),
+                onPressed: () async {
+                  _slipTransfer = await ImagePicker().getImageBytes();
+                  setState(() {});
+                },
+              ),
+            ],
+          )
         ],
       ),
     );
@@ -265,7 +290,11 @@ class _AddProductDetailState extends State<AddProductDetail> {
               conditions: _conditionText.text,
               appointment: selectedDate,
               prodName: _prodName.text,
-              images: _imagesWidget));
+              images: _imagesWidget,
+              paymentType: _isZoomSelected == true
+                  ? PaymentType.discussions
+                  : PaymentType.noDiscussions,
+              paymentSlip: _slipTransfer!));
         },
       ),
     );

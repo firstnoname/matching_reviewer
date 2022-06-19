@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -33,20 +34,25 @@ class SmeViewBloc extends Bloc<SmeViewEvent, SmeViewState> {
   Future<FutureOr<void>> _onSubmitProduct(
       SmeViewEventSubmitProduct event, Emitter<SmeViewState> emit) async {
     Matching matchingInfo = Matching(
-        entrepreneur: event.entrepreneur,
-        productExpertiseCategory: event.category,
-        productExpertiseSubCategory: event.subCategory,
-        product: Product(
-            productName: event.prodName,
-            appointment: event.appointment,
-            conditions: event.conditions,
-            pictures: event.images));
+      entrepreneur: event.entrepreneur,
+      productExpertiseCategory: event.category,
+      productExpertiseSubCategory: event.subCategory,
+      product: Product(
+          productName: event.prodName,
+          appointment: event.appointment,
+          conditions: event.conditions,
+          pictures: event.images),
+      payment: Payment(
+          payType: event.paymentType.name,
+          payDate: DateTime.now(),
+          payImage: event.paymentSlip),
+    );
 
     matchingInfo = await MatchingAPI().addMatching(matchingInfo: matchingInfo);
 
     if (matchingInfo.id != null) {
-      _products.add(matchingInfo);
       emit(SmeViewStateSubmitSuccess());
+      _products.add(matchingInfo);
       emit(SmeViewStateGetProductListSuccess(products: _products));
     } else {
       emit(SmeViewStateFailure());

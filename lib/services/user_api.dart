@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import 'services.dart';
@@ -26,7 +27,7 @@ class UserAPI extends BasedAPI {
 
   Future<User?> getUserInfo(String? id) async {
     var snapshot = await collection.doc(id).get().catchError((e) {
-      print('Get user error. msg -> ${e.toString()}');
+      debugPrint('Get user error. msg -> ${e.toString()}');
     });
     return (!snapshot.exists)
         ? null
@@ -48,13 +49,13 @@ class UserAPI extends BasedAPI {
           .where('productExpertise.$category.$subCategory', isEqualTo: true)
           .get();
 
-      print('user response -> $response');
+      debugPrint('user response -> $response');
 
       userList = response.docs.map((e) => User.fromMap(e.data())).toList();
 
-      print('user size -> ${userList.length}');
+      debugPrint('user size -> ${userList.length}');
     } catch (e) {
-      print('exception -> $e');
+      debugPrint('exception -> $e');
     }
 
     return userList;
@@ -63,14 +64,14 @@ class UserAPI extends BasedAPI {
   Future<bool> addUser({required User userInfo}) async {
     bool _isSuccess = true;
     try {
-      print('user id -> ${userInfo.id}');
+      debugPrint('user id -> ${userInfo.id}');
       await collection
           .doc(userInfo.id)
           .set(userInfo.toMap())
-          .catchError((e) => print('Add member failed -> $e'));
+          .catchError((e) => debugPrint('Add member failed -> $e'));
     } on FirebaseException catch (e) {
       _isSuccess = false;
-      print('add member failed -> ${e.message}');
+      debugPrint('add member failed -> ${e.message}');
     }
     return _isSuccess;
   }

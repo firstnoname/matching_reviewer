@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import '../../blocs/blocs.dart';
 import 'services.dart';
@@ -43,8 +44,8 @@ class Authentication {
 
   Future<void> signOut() => _firebaseAuth
       .signOut()
-      .then((_) => print('Log out succeeded'))
-      .catchError((e) => print('Error occurred: ${e.toString()}'));
+      .then((_) => debugPrint('Log out succeeded'))
+      .catchError((e) => debugPrint('Error occurred: ${e.toString()}'));
 
   Future<void> signInWithPhoneNumber(
     String verificationId,

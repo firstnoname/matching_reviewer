@@ -1,2 +1,3 @@
 const String productPathOnFireStore = 'product/';
-const String userProfilepathOnFireStore = 'profile_users/';
+const String userProfilePathOnFireStore = 'profile_users/';
+const String paymentSlipOnFireStore = 'payments/';

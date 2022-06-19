@@ -15,6 +15,8 @@ class SmeViewEventSubmitProduct extends SmeViewEvent {
   final String conditions;
   final String prodName;
   final List? images;
+  final PaymentType paymentType;
+  final Uint8List paymentSlip;
 
   SmeViewEventSubmitProduct(
       {required this.entrepreneur,
@@ -23,5 +25,7 @@ class SmeViewEventSubmitProduct extends SmeViewEvent {
       required this.appointment,
       required this.conditions,
       required this.prodName,
-      this.images});
+      this.images,
+      required this.paymentType,
+      required this.paymentSlip});
 }

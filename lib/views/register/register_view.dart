@@ -31,8 +31,8 @@ class RegisterView extends StatelessWidget {
 
     onUpdateUserInfo(User userInfo) {
       _userInfo = userInfo;
-      print('firstname -> ${_userInfo.firstName}');
-      print('sex -> ${_userInfo.sex}');
+      debugPrint('firstname -> ${_userInfo.firstName}');
+      debugPrint('sex -> ${_userInfo.sex}');
     }
 
     return Scaffold(

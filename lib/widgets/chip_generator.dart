@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class ChipGenerator extends StatelessWidget {
   final String label;
   final Color color;
+  final bool isSelected;
 
-  const ChipGenerator({Key? key, required this.label, required this.color})
+  const ChipGenerator(
+      {Key? key,
+      required this.label,
+      required this.color,
+      this.isSelected = false})
       : super(key: key);
 
   @override
@@ -19,7 +24,8 @@ class ChipGenerator extends StatelessWidget {
         ),
         label: Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
+            fontSize: isSelected == true ? 36 : 14 ,
             color: Colors.white,
           ),
         ),

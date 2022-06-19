@@ -1,7 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:matching_reviewer/models/models.dart';
-import 'package:matching_reviewer/services/based_api.dart';
+
 import 'package:matching_reviewer/utilities/constants.dart';
 
 import 'services.dart';
@@ -18,29 +19,43 @@ class MatchingAPI extends BasedAPI {
   MatchingAPI._() : super(collectionName: collectionName);
 
   Future<Matching> addMatching({required Matching matchingInfo}) async {
-    bool _isSuccess = false;
+    List<String> imagesPathOnFireStore = [];
+
+    // remove image type UInt8List;
     List<Uint8List>? imagesObject =
         matchingInfo.product?.pictures as List<Uint8List>;
     matchingInfo.product?.pictures = [];
-    List<String> imagesPathOnFireStore = [];
-    var response = await collection.add(matchingInfo.toMap()).catchError((e) {
-      print('add matching info failure. code -> $e');
+    Uint8List imageSlipTransfer = matchingInfo.payment?.payImage;
+    matchingInfo.payment?.payImage = null;
+
+    // upload matching info to firebase and get id.
+    await collection.add(matchingInfo.toMap()).catchError((e) {
+      debugPrint('add matching info failure. code -> $e');
     }).then((value) => matchingInfo.id = value.id);
 
     // upload image by id from firebase.
     if (imagesObject.isNotEmpty) {
-      print('upload image');
+      debugPrint('upload image');
       for (var image in imagesObject) {
         String? _uploadedPath = await ImageApi()
             .uploadFile(image,
-                '$productPathOnFireStore${matchingInfo.entrepreneur!.id}_${imagesObject.indexOf(image)}')
+                '$productPathOnFireStore/${matchingInfo.id}/${imagesObject.indexOf(image)}')
             .catchError((error) {
-          print('upload image error in matching_api.dart with msg -> $error');
+          debugPrint(
+              'upload image error in matching_api.dart with msg -> $error');
         });
         if (_uploadedPath.isNotEmpty) {
           imagesPathOnFireStore.add(_uploadedPath);
+          matchingInfo.product?.pictures?.addAll(imagesPathOnFireStore);
         }
       }
+    }
+
+    // upload transfer slip.
+    String? _uploadedSlip = await ImageApi().uploadFile(imageSlipTransfer,
+        '$productPathOnFireStore/${matchingInfo.id}/$paymentSlipOnFireStore/payment');
+    if (_uploadedSlip.isNotEmpty) {
+      matchingInfo.payment?.payImage = _uploadedSlip;
     }
 
     // update product info on firebase.
@@ -48,9 +63,7 @@ class MatchingAPI extends BasedAPI {
       await collection
           .doc(matchingInfo.id)
           .update({'product.pictures': imagesPathOnFireStore});
-      _isSuccess = true;
     }
-
     return matchingInfo;
   }
 

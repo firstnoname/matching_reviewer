@@ -19,6 +19,6 @@ Future<void> main() async {
         : null,
   );
 
-  BlocOverrides.runZoned(() => null, blocObserver: ABlocObserver());
-  runApp(const MatchingReviewerWebApp());
+  BlocOverrides.runZoned(() => runApp(const MatchingReviewerWebApp()),
+      blocObserver: ABlocObserver());
 }

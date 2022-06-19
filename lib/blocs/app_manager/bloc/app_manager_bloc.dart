@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:matching_reviewer/models/models.dart' as appModels;
+import 'package:matching_reviewer/models/models.dart' as app_models;
 import 'package:matching_reviewer/services/services.dart';
 import 'package:meta/meta.dart';
 
 part 'app_manager_event.dart';
+
 part 'app_manager_state.dart';
 
 class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
@@ -15,9 +16,11 @@ class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
   Authentication get appAuth => _appAuth;
 
   User? _currentUser;
+
   User? get currentUser => _currentUser;
 
-  appModels.User? _member;
+  app_models.User? _member;
+
   get member => _member;
 
   AppManagerBloc() : super(AppManagerInitial()) {
@@ -29,7 +32,7 @@ class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
     on<AppManagerEventLoginFailure>(_onLoginFailure);
   }
 
-  void updateCurrentUserProfile(User? userAuth, appModels.User? member) {
+  void updateCurrentUserProfile(User? userAuth, app_models.User? member) {
     _member = member;
     _currentUser = userAuth;
   }
@@ -51,5 +54,7 @@ class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
   }
 
   FutureOr<void> _onLoginFailure(
-      AppManagerEventLoginFailure event, Emitter<AppManagerState> emit) {}
+      AppManagerEventLoginFailure event, Emitter<AppManagerState> emit) {
+    emit(AppManagerStateUnAuthenticate());
+  }
 }
