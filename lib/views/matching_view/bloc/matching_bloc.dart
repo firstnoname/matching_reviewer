@@ -4,14 +4,12 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:matching_reviewer/models/models.dart';
 import 'package:matching_reviewer/services/services.dart';
-import 'package:meta/meta.dart';
 
 part 'matching_event.dart';
 
 part 'matching_state.dart';
 
 class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
-  UserRoles? _selectedRole;
   String? selectedCategory;
   String? selectedSubCategory;
   User? selectedOptionOne;
@@ -22,9 +20,11 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
 
   User get optionTwo => selectedOptionTwo!;
 
+  List<Matching> _products = [];
+
   MatchingBloc() : super(MatchingInitial()) {
     try {
-      on<MatchingEventInitial>(_onInit);
+      on<MatchingEventInit>(_onInit);
       on<MatchingEventSelectedRole>(_onSelectedRole);
       on<MatchingSelectedCategory>(_onSelectedCategory);
       on<MatchingEventSelectOptionOne>(_onSelectedOptionOne);
@@ -36,13 +36,12 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   }
 
   FutureOr<void> _onInit(
-      MatchingEventInitial event, Emitter<MatchingState> emit) {
-    // List<Matching> _
+      MatchingEventInit event, Emitter<MatchingState> emit) async {
+    _products = await MatchingAPI().getMatchingList();
   }
 
   Future<FutureOr<void>> _onSelectedRole(
       MatchingEventSelectedRole event, Emitter<MatchingState> emit) async {
-    _selectedRole = event.selectedRole;
     emit(MatchingSelectRoleSuccess());
   }
 
@@ -51,20 +50,10 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
     selectedCategory = event.selectedCategory;
     selectedSubCategory = event.selectedSubCategory;
 
-    List<Matching> _products = [];
     _products = await MatchingAPI()
         .getMatchingByCategory(subCategory: event.selectedSubCategory);
-    emit(MatchingStateGetOptionsOneSuccess(products: _products));
 
-    // get user list (entrepreneur or reviewer).
-    // List<User> _users = [];
-    //
-    // _users = await UserAPI().getUsers(
-    //     userRole: _selectedRole?.name,
-    //     category: event.selectedCategory,
-    //     subCategory: event.selectedSubCategory);
-    // emit(MatchingStateGetOptionsOneSuccess(
-    //     role: _selectedRole ?? UserRoles.entrepreneur, users: _users));
+    emit(MatchingStateGetOptionsOneSuccess(products: _products));
   }
 
   Future<FutureOr<void>> _onSelectedOptionOne(
@@ -88,32 +77,17 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
       MatchingEventSelectOptionTwo event, Emitter<MatchingState> emit) {
     selectedOptionTwo = event.optionTwo;
     _matchingInfo.reviewer = event.optionTwo;
-    // emit(MatchingStateSelectOptionTwoSuccess());
+    emit(MatchingStateSelectOptionTwoSuccess());
   }
 
   Future<FutureOr<void>> _onSelectedApprove(
       MatchingEventApproved event, Emitter<MatchingState> emit) async {
-    // call api to add matching info
-
-    // Matching matchingInfo = Matching(
-    //     reviewer: _selectedRole == UserRoles.reviewer
-    //         ? selectedOptionOne!
-    //         : selectedOptionTwo!,
-    //     entrepreneur: _selectedRole == UserRoles.entrepreneur
-    //         ? selectedOptionOne!
-    //         : selectedOptionTwo!,
-    //     productExpertiseCategory: selectedCategory ?? '',
-    //     productExpertiseSubCategory: selectedSubCategory ?? '',
-    //     product: Product());
-
-    // bool isAddedMatching =
-    //     await MatchingAPI().addMatching(matchingInfo: _matchingInfo);
-
     bool isAddedMatching =
         await MatchingAPI().updateMatchingInfo(matchingInfo: _matchingInfo);
 
     if (isAddedMatching) {
-      emit(MatchingStateApproveSuccess());
+      _products.removeWhere((product) => product.id == _matchingInfo.id);
+      emit(MatchingStateApproveSuccess(products: _products));
     } else {
       emit(MatchingStateFailure());
     }

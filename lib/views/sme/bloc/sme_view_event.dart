@@ -5,6 +5,12 @@ abstract class SmeViewEvent {}
 
 class SmeViewEventInitial extends SmeViewEvent {}
 
+class SmeViewEventInProgress extends SmeViewEvent {
+  final Matching createdProduct;
+
+  SmeViewEventInProgress({required this.createdProduct});
+}
+
 class SmeViewEventGetProductList extends SmeViewEvent {}
 
 class SmeViewEventSubmitProduct extends SmeViewEvent {

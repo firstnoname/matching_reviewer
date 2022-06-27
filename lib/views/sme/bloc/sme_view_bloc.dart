@@ -17,13 +17,14 @@ class SmeViewBloc extends Bloc<SmeViewEvent, SmeViewState> {
 
   SmeViewBloc({required this.userID}) : super(SmeViewInitial()) {
     on<SmeViewEventInitial>(_onInitial);
+    on<SmeViewEventInProgress>(_onInProgress);
     on<SmeViewEventGetProductList>(_onGetProductList);
     on<SmeViewEventSubmitProduct>(_onSubmitProduct);
   }
 
   Future<FutureOr<void>> _onInitial(
       SmeViewEvent event, Emitter<SmeViewState> emit) async {
-    _products = await MatchingAPI().getMatchingList(userId: userID);
+    _products = await MatchingAPI().getMatchingListByUserId(userId: userID);
 
     emit(SmeViewStateGetProductListSuccess(products: _products));
   }
@@ -52,10 +53,15 @@ class SmeViewBloc extends Bloc<SmeViewEvent, SmeViewState> {
 
     if (matchingInfo.id != null) {
       emit(SmeViewStateSubmitSuccess());
-      _products.add(matchingInfo);
-      emit(SmeViewStateGetProductListSuccess(products: _products));
+      add(SmeViewEventInProgress(createdProduct: matchingInfo));
     } else {
       emit(SmeViewStateFailure());
     }
+  }
+
+  FutureOr<void> _onInProgress(
+      SmeViewEventInProgress event, Emitter<SmeViewState> emit) {
+    _products.add(event.createdProduct);
+    emit(SmeViewStateGetProductListSuccess(products: _products));
   }
 }

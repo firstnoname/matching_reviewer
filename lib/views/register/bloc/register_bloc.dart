@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
+import 'package:matching_reviewer/blocs/blocs.dart';
 import 'package:matching_reviewer/models/user.dart';
 import 'package:matching_reviewer/services/services.dart';
 import 'package:matching_reviewer/utilities/utilities.dart';
@@ -14,8 +15,10 @@ part 'register_state.dart';
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final bool isReviewer;
   Uint8List? _imageBytes;
+  AppManagerBloc appManagerBloc;
 
-  RegisterBloc({required this.isReviewer}) : super(RegisterInitial()) {
+  RegisterBloc({required this.appManagerBloc, required this.isReviewer})
+      : super(RegisterInitial()) {
     on<RegisterEventSelectImage>(_onSelectImage);
     on<RegisterEventSubmittedForm>(_onSubmittedForm);
   }
@@ -32,7 +35,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     if (_imageBytes != null) {
       String? _uploadedProfilePath =
-          await ImageApi().uploadFile(_imageBytes!, _path);
+          await ImageApi().uploadImage(_imageBytes!, _path);
 
       if (_uploadedProfilePath.isNotEmpty) {
         event.userInfo.imageProfilePath = _uploadedProfilePath;
@@ -41,6 +44,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         bool _isUserInfoSuccess =
             await UserAPI().addUser(userInfo: event.userInfo);
         if (_isUserInfoSuccess) {
+          appManagerBloc.updateCurrentUserProfile(member: event.userInfo);
           emit(RegisterStateSucceed());
         }
       }

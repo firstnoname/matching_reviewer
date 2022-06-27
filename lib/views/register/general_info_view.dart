@@ -81,7 +81,7 @@ class GeneralInfoView extends StatelessWidget {
                 const SizedBox(width: 16),
                 DropdownButton(
                   value: dropdownStudent.value,
-                  items: <String>['Student', '']
+                  items: <String>['Student', 'Political']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,

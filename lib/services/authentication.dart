@@ -10,6 +10,7 @@ class Authentication {
   final FirebaseAuth _firebaseAuth;
 
   FirebaseAuth get firebaseAuth => _firebaseAuth;
+
   User? get firebaseCurrentUser => _firebaseAuth.currentUser;
 
   factory Authentication(AppManagerBloc appManagerBloc) {
@@ -68,9 +69,9 @@ class Authentication {
     var user = await UserAPI().getUserInfo(_firebaseAuth.currentUser!.uid);
     if (user != null) {
       // update user info in app.
-      _appManagerBloc.updateCurrentUserProfile(_firebaseAuth.currentUser, user);
+      _appManagerBloc.updateCurrentUserProfile(
+          userAuth: _firebaseAuth.currentUser, member: user);
       _appManagerBloc.add(AppManagerEventLoginSucceed());
-      // _appManagerBloc.add(ICharmManagerEventShowUserPolicy());
     } else {
       // user register flow.
       _firebaseAuth.currentUser!.uid;

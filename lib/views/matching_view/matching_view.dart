@@ -20,13 +20,16 @@ class MatchingView extends StatelessWidget {
           child: BlocBuilder<MatchingBloc, MatchingState>(
             builder: (context, state) {
               if (state is MatchingInitial) {
-                return _selectRole(context);
+                return _buildSelectCategory(context);
               } else if (state is MatchingSelectRoleSuccess) {
                 return _selectCategory(context);
               } else if (state is MatchingStateGetOptionsOneSuccess) {
                 return _listBuilderOptionOne(products: state.products);
               } else if (state is MatchingStateSelectOptionOneSuccess) {
-                return _listBuilderOptionTwo(users: state.userList);
+                return _listBuilderOptionTwo(context, users: state.userList);
+              } else if (state is MatchingStateApproveSuccess) {
+                Navigator.pop(context);
+                return _listBuilderOptionOne(products: state.products);
               } else {
                 return Container();
               }
@@ -63,6 +66,18 @@ class MatchingView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildSelectCategory(BuildContext context) {
+    // return SelectableCategory(
+    //     onSelectCategory: (String category, String subCategory) => context
+    //         .read<MatchingBloc>()
+    //         .add(MatchingSelectedCategory(
+    //             selectedCategory: category, selectedSubCategory: subCategory)));
+    return SelectableCategory.forMatchingView(onSelectCategory: (String category, String subCategory) => context
+            .read<MatchingBloc>()
+        .add(MatchingSelectedCategory(
+        selectedCategory: category, selectedSubCategory: subCategory)));
   }
 
   Widget _selectCategory(BuildContext context) {
@@ -253,19 +268,23 @@ class MatchingView extends StatelessWidget {
     );
   }
 
-  Widget _listBuilderOptionTwo({required List<User> users}) {
+  Widget _listBuilderOptionTwo(BuildContext context,
+      {required List<User> users}) {
     return Column(
       children: [
         const Text('Select reviewer'),
         ListView.builder(
           shrinkWrap: true,
           itemCount: users.length,
-          itemBuilder: (context, index) => GestureDetector(
+          itemBuilder: (ctx, index) => GestureDetector(
             onTap: () {
               context
                   .read<MatchingBloc>()
                   .add(MatchingEventSelectOptionTwo(optionTwo: users[index]));
-              _showMyDialog(context);
+              _showMyDialog(context,
+                  approveFunc: () => context
+                      .read<MatchingBloc>()
+                      .add(MatchingEventApproved()));
             },
             child: UserCardWidget(userInfo: users[index]),
           ),
@@ -274,7 +293,8 @@ class MatchingView extends StatelessWidget {
     );
   }
 
-  Future<void> _showMyDialog(BuildContext context) async {
+  Future<void> _showMyDialog(BuildContext context,
+      {required Function approveFunc}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -301,9 +321,9 @@ class MatchingView extends StatelessWidget {
               child: const Text('Approve'),
               style: TextButton.styleFrom(primary: Colors.lightGreen),
               onPressed: () {
-                context.read<MatchingBloc>().add(MatchingEventApproved());
-                Navigator.of(ctx).pop();
-                Navigator.of(ctx).pop();
+                approveFunc();
+                // Navigator.of(ctx).pop();
+                // Navigator.of(ctx).pop();
               },
             ),
             TextButton(

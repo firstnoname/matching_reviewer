@@ -6,7 +6,7 @@ class Matching {
   User? reviewer;
   final String? productExpertiseCategory;
   final String? productExpertiseSubCategory;
-  final Product? product;
+  Product? product;
   final Payment? payment;
 
   Matching(

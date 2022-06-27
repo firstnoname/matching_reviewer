@@ -35,28 +35,52 @@ class RegisterView extends StatelessWidget {
       debugPrint('sex -> ${_userInfo.sex}');
     }
 
-    return Scaffold(
-      appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _key,
-          child: BlocProvider<RegisterBloc>(
-            create: (context) => RegisterBloc(isReviewer: isReviewer),
-            child: BlocBuilder<RegisterBloc, RegisterState>(
-              builder: (context, state) {
-                if (state is RegisterStateSelectImageSuccess) {
-                  _profileImage = state.imageBytes;
-                }
-                return isReviewer == true
-                    ? _buildReviewerForm(_userInfo, _profileImage, context,
-                        _productExpertise, onUpdateExpertise, onUpdateUserInfo)
-                    : _buildEntrepreneurForm(_userInfo, _profileImage, context,
-                        _productExpertise, onUpdateExpertise, onUpdateUserInfo);
-              },
+    return BlocBuilder<AppManagerBloc, AppManagerState>(
+      builder: (context, state) {
+        if (state is AppManagerStateLoginSuccess) {
+          Future.delayed(Duration.zero, () {
+            Navigator.pop(context);
+          });
+        }
+        return Scaffold(
+          appBar: AppBar(),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Form(
+                key: _key,
+                child: BlocProvider<RegisterBloc>(
+                  create: (context) => RegisterBloc(
+                      appManagerBloc: context.read<AppManagerBloc>(),
+                      isReviewer: isReviewer),
+                  child: BlocBuilder<RegisterBloc, RegisterState>(
+                    builder: (context, state) {
+                      if (state is RegisterStateSelectImageSuccess) {
+                        _profileImage = state.imageBytes;
+                      }
+                      return isReviewer == true
+                          ? _buildReviewerForm(
+                              _userInfo,
+                              _profileImage,
+                              context,
+                              _productExpertise,
+                              onUpdateExpertise,
+                              onUpdateUserInfo)
+                          : _buildEntrepreneurForm(
+                              _userInfo,
+                              _profileImage,
+                              context,
+                              _productExpertise,
+                              onUpdateExpertise,
+                              onUpdateUserInfo);
+                    },
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -101,18 +125,18 @@ class RegisterView extends StatelessWidget {
         ElevatedButton(
           child: const Text('Register'),
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return const Index();
-              },
-            ));
             if (_key.currentState!.validate()) {
-              User _userInfo = User();
               _userInfo.id = context
                   .read<AppManagerBloc>()
                   .appAuth
                   .firebaseCurrentUser!
                   .uid;
+              _userInfo.phoneNumber = context
+                  .read<AppManagerBloc>()
+                  .appAuth
+                  .firebaseCurrentUser!
+                  .phoneNumber;
+              _userInfo.productExpertise = _productExpertise;
 
               context
                   .read<RegisterBloc>()
@@ -165,17 +189,16 @@ class RegisterView extends StatelessWidget {
                   .appAuth
                   .firebaseCurrentUser!
                   .uid;
+              _userInfo.phoneNumber = context
+                  .read<AppManagerBloc>()
+                  .appAuth
+                  .firebaseCurrentUser!
+                  .phoneNumber;
               _userInfo.productExpertise = _productExpertise;
 
               context
                   .read<RegisterBloc>()
-                  .add(RegisterEventSubmittedForm(userInfo: userInfo));
-
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return const Index();
-                },
-              ));
+                  .add(RegisterEventSubmittedForm(userInfo: _userInfo));
             }
           },
         ),

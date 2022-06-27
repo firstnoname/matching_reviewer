@@ -19,6 +19,6 @@ class RegisterStateSelectImageSuccess extends RegisterState {
   RegisterStateSelectImageSuccess({required this.imageBytes});
 }
 
-class RegisterStateSucceed extends RegisterState {}
-
-
+class RegisterStateSucceed extends RegisterState {
+  RegisterStateSucceed();
+}

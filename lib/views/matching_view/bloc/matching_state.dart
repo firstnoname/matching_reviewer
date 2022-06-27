@@ -23,4 +23,8 @@ class MatchingStateSelectOptionOneSuccess extends MatchingState {
 
 class MatchingStateSelectOptionTwoSuccess extends MatchingState {}
 
-class MatchingStateApproveSuccess extends MatchingState {}
+class MatchingStateApproveSuccess extends MatchingState {
+  final List<Matching> products;
+
+  MatchingStateApproveSuccess({required this.products});
+}

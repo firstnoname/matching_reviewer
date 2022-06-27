@@ -4,6 +4,7 @@ import 'package:matching_reviewer/blocs/app_manager/bloc/app_manager_bloc.dart';
 import 'package:matching_reviewer/models/matching.dart';
 import 'package:matching_reviewer/views/sme/bloc/sme_view_bloc.dart';
 import 'package:matching_reviewer/views/views.dart';
+import 'package:matching_reviewer/widgets/widgets.dart';
 
 class SMEView extends StatelessWidget {
   const SMEView({Key? key}) : super(key: key);
@@ -41,54 +42,7 @@ class SMEView extends StatelessWidget {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _products.length,
-                    itemBuilder: (context, index) => Card(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            leading: _products[index]
-                                    .product!
-                                    .pictures!
-                                    .isNotEmpty
-                                ? CircleAvatar(
-                                    radius: (100),
-                                    backgroundColor: Colors.white,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(50),
-                                      child: Image.network(
-                                          _products[index]
-                                              .product
-                                              ?.pictures
-                                              ?.first,
-                                          fit: BoxFit.contain),
-                                    ))
-                                : const SizedBox(
-                                    width: 10,
-                                    height: 10,
-                                  ),
-                            title: Text(
-                                _products[index].product?.productName ?? ''),
-                            subtitle: Text(
-                                _products[index].product?.conditions ?? ''),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              TextButton(
-                                child: const Text('Details'),
-                                onPressed: () => _productDetail(context,
-                                    productDetail: _products[index]),
-                              ),
-                              const SizedBox(width: 8),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: ProductsCardList(products: _products),
                 ),
               ],
             ),
@@ -96,16 +50,5 @@ class SMEView extends StatelessWidget {
         },
       ),
     );
-  }
-
-  Future _productDetail(BuildContext context,
-      {required Matching productDetail}) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: Image.network(productDetail.product?.pictures?.first),
-          );
-        });
   }
 }

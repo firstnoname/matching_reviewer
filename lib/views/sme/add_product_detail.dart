@@ -32,7 +32,7 @@ class _AddProductDetailState extends State<AddProductDetail> {
     return BlocBuilder<SmeViewBloc, SmeViewState>(
       builder: (context, state) {
         if (state is SmeViewStateSubmitSuccess) {
-          Navigator.pop(context);
+          // Navigator.pop(context);
         }
         return AlertDialog(
           content: Stack(
@@ -47,13 +47,16 @@ class _AddProductDetailState extends State<AddProductDetail> {
                           (String category, String subCategory) {
                         _category = category;
                         _subCategory = subCategory;
-                        debugPrint('category -> $category, sub -> $subCategory');
+                        debugPrint(
+                            'category -> $category, sub -> $subCategory');
                       }),
                       _widgetProductNameFormField(),
                       _widgetConditionFormField(),
-                      _widgetSelectAppointment(),
-                      _widgetSelectImageButton(),
                       _widgetReviewOptions(),
+                      _isZoomSelected == true
+                          ? _widgetSelectAppointment()
+                          : Container(),
+                      _widgetSelectImageButton(),
                       _slipTransfer == null
                           ? Container()
                           : _widgetSubmitButton(context),
@@ -295,6 +298,7 @@ class _AddProductDetailState extends State<AddProductDetail> {
                   ? PaymentType.discussions
                   : PaymentType.noDiscussions,
               paymentSlip: _slipTransfer!));
+          Navigator.pop(context);
         },
       ),
     );

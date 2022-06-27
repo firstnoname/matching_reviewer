@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:matching_reviewer/blocs/blocs.dart';
 import 'package:matching_reviewer/models/models.dart' as app_models;
 import 'package:matching_reviewer/services/services.dart';
 import 'package:meta/meta.dart';
@@ -32,9 +33,11 @@ class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
     on<AppManagerEventLoginFailure>(_onLoginFailure);
   }
 
-  void updateCurrentUserProfile(User? userAuth, app_models.User? member) {
+  void updateCurrentUserProfile(
+      {User? userAuth, app_models.User? member}) async {
     _member = member;
     _currentUser = userAuth;
+    add(AppManagerEventLoginSucceed());
   }
 
   FutureOr<void> _onFirebaseAuthenticated(
@@ -55,6 +58,7 @@ class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
 
   FutureOr<void> _onLoginFailure(
       AppManagerEventLoginFailure event, Emitter<AppManagerState> emit) {
+    print('login failure event');
     emit(AppManagerStateUnAuthenticate());
   }
 }

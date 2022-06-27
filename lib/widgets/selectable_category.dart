@@ -3,9 +3,21 @@ import 'package:matching_reviewer/widgets/widgets.dart';
 
 class SelectableCategory extends StatefulWidget {
   final Function onSelectCategory;
+  final bool isForMatchingView;
 
-  const SelectableCategory({Key? key, required this.onSelectCategory})
+  const SelectableCategory(
+      {Key? key,
+      required this.onSelectCategory,
+      this.isForMatchingView = false})
       : super(key: key);
+
+  factory SelectableCategory.forMatchingView(
+      {required Function onSelectCategory}) {
+    return SelectableCategory(
+      onSelectCategory: onSelectCategory,
+      isForMatchingView: true,
+    );
+  }
 
   @override
   State<SelectableCategory> createState() => _SelectableCategoryState();
@@ -35,7 +47,7 @@ class _SelectableCategoryState extends State<SelectableCategory> {
       {'accessory': 'Accessory'},
       {'bag': 'Bag'},
     ],
-    'services': [
+    'service': [
       {'accommodation': 'Accommodation(Hotel, Resort, Hostel)'},
       {'tour': 'Tour'},
       {'restaurant': 'Restaurant'},
@@ -47,6 +59,17 @@ class _SelectableCategoryState extends State<SelectableCategory> {
 
   @override
   Widget build(BuildContext context) {
+    return _defaultBuilder();
+    // return widget.isForMatchingView == true
+    //     ? _matchingViewBuilder()
+    //     : _defaultBuilder();
+  }
+
+  Column _matchingViewBuilder() {
+    return Column();
+  }
+
+  Column _defaultBuilder() {
     return Column(
         children: _categories.entries
             .map((category) => Row(

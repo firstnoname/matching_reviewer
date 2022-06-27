@@ -5,8 +5,14 @@ class Product {
   final String? conditions;
   final DateTime? appointment;
   List? pictures;
+  String? reviewedFormPath;
 
-  Product({this.productName, this.conditions, this.appointment, this.pictures});
+  Product(
+      {this.productName,
+      this.conditions,
+      this.appointment,
+      this.pictures,
+      this.reviewedFormPath});
 
   Map<String, dynamic> toMap() {
     return {
@@ -14,15 +20,16 @@ class Product {
       'conditions': conditions,
       'appointment': appointment,
       'pictures': pictures?.map((e) => e.toString()),
+      'reviewedFormPath': reviewedFormPath
     };
   }
 
   factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
-      productName: map['productName'],
-      conditions: map['conditions'],
-      appointment: (map['appointment'] as Timestamp).toDate(),
-      pictures: map['pictures'],
-    );
+        productName: map['productName'],
+        conditions: map['conditions'],
+        appointment: (map['appointment'] as Timestamp).toDate(),
+        pictures: map['pictures'],
+        reviewedFormPath: map['reviewedFormPath']);
   }
 }

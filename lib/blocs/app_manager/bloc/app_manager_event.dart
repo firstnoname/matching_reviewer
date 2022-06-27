@@ -1,7 +1,7 @@
 part of 'app_manager_bloc.dart';
 
 @immutable
-abstract class AppManagerEvent {}
+abstract class AppManagerEvent with NoIndicator {}
 
 class AppManagerEventFirebaseAuthenticated extends AppManagerEvent {}
 
@@ -14,4 +14,3 @@ class AppManagerEventLoginFailure extends AppManagerEvent {
 
   AppManagerEventLoginFailure({required this.message});
 }
-

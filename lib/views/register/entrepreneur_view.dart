@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 
 enum SmallSME { production, services }
+
 enum MediumSME { production, services }
+
 enum LargeSME { production, services }
 
 class EntrepreneurView extends StatelessWidget {
   EntrepreneurView({Key? key}) : super(key: key);
 
-  final ValueNotifier<SmallSME> _initSmallSME = ValueNotifier(SmallSME.production);
-  final ValueNotifier<MediumSME> _initMediumSME = ValueNotifier(MediumSME.production);
-  final ValueNotifier<LargeSME> _initLargeSME = ValueNotifier(LargeSME.production);
+  final ValueNotifier<SmallSME> _initSmallSME =
+      ValueNotifier(SmallSME.production);
+  final ValueNotifier<MediumSME> _initMediumSME =
+      ValueNotifier(MediumSME.production);
+  final ValueNotifier<LargeSME> _initLargeSME =
+      ValueNotifier(LargeSME.production);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +49,15 @@ class EntrepreneurView extends StatelessWidget {
                     children: [
                       Flexible(
                         child: RadioListTile<SmallSME>(
-                          title: const Text('Production'),
+                          title: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text('Production'),
+                              Text('-Less than 5 workers'),
+                              Text('-Less than 1.8 million bth/year')
+                            ],
+                          ),
                           value: SmallSME.production,
                           groupValue: _initSmallSME.value,
                           onChanged: (SmallSME? value) {
@@ -54,7 +67,15 @@ class EntrepreneurView extends StatelessWidget {
                       ),
                       Flexible(
                         child: RadioListTile<SmallSME>(
-                          title: const Text('Services'),
+                          title: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text('Services'),
+                              Text('-Less than 5 workers'),
+                              Text('-Less than 1.8 million bth/year')
+                            ],
+                          ),
                           value: SmallSME.services,
                           groupValue: _initSmallSME.value,
                           onChanged: (SmallSME? value) {
@@ -83,12 +104,21 @@ class EntrepreneurView extends StatelessWidget {
               const Text('1. Medium SMEs'),
               ValueListenableBuilder<MediumSME>(
                 valueListenable: _initMediumSME,
-                builder: (BuildContext context, MediumSME value, Widget? child) {
+                builder:
+                    (BuildContext context, MediumSME value, Widget? child) {
                   return Row(
                     children: [
                       Flexible(
                         child: RadioListTile<MediumSME>(
-                          title: const Text('Production'),
+                          title: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text('Production'),
+                              Text('-Less than 50 workers'),
+                              Text('-Less than 100 million bth/year')
+                            ],
+                          ),
                           value: MediumSME.production,
                           groupValue: _initMediumSME.value,
                           onChanged: (MediumSME? value) {
@@ -98,7 +128,15 @@ class EntrepreneurView extends StatelessWidget {
                       ),
                       Flexible(
                         child: RadioListTile<MediumSME>(
-                          title: const Text('Services'),
+                          title: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text('Services'),
+                              Text('-Less than 30 workers'),
+                              Text('-Less than 50 million bth/year')
+                            ],
+                          ),
                           value: MediumSME.services,
                           groupValue: _initMediumSME.value,
                           onChanged: (MediumSME? value) {
@@ -132,7 +170,15 @@ class EntrepreneurView extends StatelessWidget {
                     children: [
                       Flexible(
                         child: RadioListTile<LargeSME>(
-                          title: const Text('Production'),
+                          title: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text('Production'),
+                              Text('-Less than 200 workers'),
+                              Text('-Less than 500 million bth/year')
+                            ],
+                          ),
                           value: LargeSME.production,
                           groupValue: _initLargeSME.value,
                           onChanged: (LargeSME? value) {
@@ -142,7 +188,15 @@ class EntrepreneurView extends StatelessWidget {
                       ),
                       Flexible(
                         child: RadioListTile<LargeSME>(
-                          title: const Text('Services'),
+                          title: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text('Services'),
+                              Text('-Less than 100 workers'),
+                              Text('-Less than 300 million bth/year')
+                            ],
+                          ),
                           value: LargeSME.services,
                           groupValue: _initLargeSME.value,
                           onChanged: (LargeSME? value) {

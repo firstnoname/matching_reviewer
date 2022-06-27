@@ -185,176 +185,155 @@ class _ProductExpertiseViewState extends State<ProductExpertiseView> {
                     runSpacing: 5.0,
                     spacing: 5.0,
                     children: [
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value:
-                                  widget.productExpertise.cloth?.shirt ?? false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.cloth?.shirt =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Shirt, Blouse, T-shirt, Jacket')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value:
+                                widget.productExpertise.cloth?.shirt ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.cloth?.shirt =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Shirt, Blouse, T-shirt, Jacket')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value: widget.productExpertise.cloth?.trouser ??
-                                  false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.cloth?.trouser =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Trousers, Pants')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value:
+                                widget.productExpertise.cloth?.trouser ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.cloth?.trouser =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Trousers, Pants')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value:
-                                  widget.productExpertise.cloth?.cap ?? false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.cloth?.cap =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Cap, Hat')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value: widget.productExpertise.cloth?.cap ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.cloth?.cap =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Cap, Hat')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value:
-                                  widget.productExpertise.cloth?.scarf ?? false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.cloth?.scarf =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Scarf')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value:
+                                widget.productExpertise.cloth?.scarf ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.cloth?.scarf =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Scarf')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value:
-                                  widget.productExpertise.cloth?.skirt ?? false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.cloth?.skirt =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Skirt')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value:
+                                widget.productExpertise.cloth?.skirt ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.cloth?.skirt =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Skirt')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value:
-                                  widget.productExpertise.cloth?.shoes ?? false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.cloth?.shoes =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Shoes, Boot, Sneaker')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value:
+                                widget.productExpertise.cloth?.shoes ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.cloth?.shoes =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Shoes, Boot, Sneaker')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value:
-                                  widget.productExpertise.cloth?.belt ?? false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.cloth?.belt =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Belt')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value: widget.productExpertise.cloth?.belt ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.cloth?.belt =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Belt')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value: widget.productExpertise.cloth?.accessory ??
-                                  false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.cloth?.accessory =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Accessory')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value: widget.productExpertise.cloth?.accessory ??
+                                false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.cloth?.accessory =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Accessory')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value:
-                                  widget.productExpertise.cloth?.bag ?? false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.cloth?.bag =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Bag, Handbag, Purse')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value: widget.productExpertise.cloth?.bag ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.cloth?.bag =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Bag, Handbag, Purse')
+                        ],
                       ),
                     ],
                   ),
@@ -381,103 +360,93 @@ class _ProductExpertiseViewState extends State<ProductExpertiseView> {
                     runSpacing: 5.0,
                     spacing: 5.0,
                     children: [
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value: widget
-                                      .productExpertise.service?.accomodation ??
-                                  false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.service
-                                      ?.accomodation = value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text(
-                                'Accommodation (Hotel, Resort, Hostel, Homestay')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value:
+                                widget.productExpertise.service?.accomodation ??
+                                    false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.service?.accomodation =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text(
+                              'Accommodation (Hotel, Resort, Hostel, Homestay')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value: widget.productExpertise.service?.tour ??
-                                  false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.service?.tour =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Tour')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value:
+                                widget.productExpertise.service?.tour ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.service?.tour =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Tour')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value:
-                                  widget.productExpertise.service?.restaurant ??
-                                      false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.service?.restaurant =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Restaurants')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value:
+                                widget.productExpertise.service?.restaurant ??
+                                    false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.service?.restaurant =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Restaurants')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value: widget.productExpertise.service?.cafe ??
-                                  false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.service?.cafe =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Cafe')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value:
+                                widget.productExpertise.service?.cafe ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.service?.cafe =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Cafe')
+                        ],
                       ),
-                      Flexible(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              checkColor: Colors.white,
-                              value: widget.productExpertise.service?.other ??
-                                  false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.productExpertise.service?.other =
-                                      value ?? false;
-                                });
-                                widget.onUpdateValue(widget.productExpertise);
-                              },
-                            ),
-                            const Text('Other')
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            checkColor: Colors.white,
+                            value:
+                                widget.productExpertise.service?.other ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.productExpertise.service?.other =
+                                    value ?? false;
+                              });
+                              widget.onUpdateValue(widget.productExpertise);
+                            },
+                          ),
+                          const Text('Other')
+                        ],
                       ),
                     ],
                   ),
