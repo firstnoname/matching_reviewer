@@ -22,7 +22,7 @@ class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
 
   app_models.User? _member;
 
-  get member => _member;
+  app_models.User? get member => _member;
 
   AppManagerBloc() : super(AppManagerInitial()) {
     _appAuth = Authentication(this);
@@ -58,7 +58,6 @@ class AppManagerBloc extends Bloc<AppManagerEvent, AppManagerState> {
 
   FutureOr<void> _onLoginFailure(
       AppManagerEventLoginFailure event, Emitter<AppManagerState> emit) {
-    print('login failure event');
     emit(AppManagerStateUnAuthenticate());
   }
 }

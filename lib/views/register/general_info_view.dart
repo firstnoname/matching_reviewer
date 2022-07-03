@@ -5,15 +5,19 @@ import 'package:matching_reviewer/utilities/utilities.dart';
 class GeneralInfoView extends StatelessWidget {
   final User userInfo;
   final Function(User) onUpdateUserInfo;
+  final bool isReviewer;
 
   const GeneralInfoView(
-      {Key? key, required this.userInfo, required this.onUpdateUserInfo})
+      {Key? key,
+      required this.userInfo,
+      required this.onUpdateUserInfo,
+      required this.isReviewer})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ValueNotifier<String> dropdownSex = ValueNotifier('Female');
-    ValueNotifier<String> dropdownStudent = ValueNotifier('Student');
+    ValueNotifier<String> dropdownOccupation = ValueNotifier('Student');
     return Container(
       width: MediaQuery.of(context).size.width / 2,
       padding: EdgeInsets.symmetric(
@@ -47,6 +51,13 @@ class GeneralInfoView extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(width: 16),
+          TextFormField(
+            decoration: const InputDecoration(hintText: 'Email'),
+            onChanged: (value) => userInfo.email = value,
+            validator: (value) => Validator(context).isNotEmpty(value: value),
+            onFieldSubmitted: (value) => userInfo.email = value,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Row(
@@ -73,29 +84,41 @@ class GeneralInfoView extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Row(
-              children: [
-                const Text('Occupation'),
-                const SizedBox(width: 16),
-                DropdownButton(
-                  value: dropdownStudent.value,
-                  items: <String>['Student', 'Political']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? value) {
-                    dropdownStudent.value = value ?? '';
-                    userInfo.occupation = value;
-                  },
-                ),
-              ],
-            ),
-          ),
+          isReviewer == true
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    children: [
+                      const Text('Occupation'),
+                      const SizedBox(width: 16),
+                      ValueListenableBuilder(
+                          valueListenable: dropdownOccupation,
+                          builder: (BuildContext context, String value,
+                              Widget? child) {
+                            return DropdownButton(
+                              value: dropdownOccupation.value,
+                              items: <String>[
+                                'Student',
+                                'Office worker',
+                                'Government officer',
+                                'Business owner',
+                                'Other ...'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? value) {
+                                dropdownOccupation.value = value ?? '';
+                                userInfo.occupation = value;
+                              },
+                            );
+                          }),
+                    ],
+                  ),
+                )
+              : const SizedBox(),
         ],
       ),
     );

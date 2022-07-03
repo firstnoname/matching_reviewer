@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:matching_reviewer/blocs/app_manager/bloc/app_manager_bloc.dart';
 import 'package:matching_reviewer/models/matching.dart';
+import 'package:matching_reviewer/models/models.dart';
 import 'package:matching_reviewer/views/sme/bloc/sme_view_bloc.dart';
 import 'package:matching_reviewer/views/views.dart';
 import 'package:matching_reviewer/widgets/widgets.dart';
@@ -14,7 +15,7 @@ class SMEView extends StatelessWidget {
     List<Matching> _products = [];
     return BlocProvider(
       create: (context) =>
-          SmeViewBloc(userID: context.read<AppManagerBloc>().member.id)
+          SmeViewBloc(userID: context.read<AppManagerBloc>().member!.id!)
             ..add(SmeViewEventInitial()),
       child: BlocBuilder<SmeViewBloc, SmeViewState>(
         builder: (context, state) {
@@ -42,7 +43,18 @@ class SMEView extends StatelessWidget {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
-                  child: ProductsCardList(products: _products),
+                  child: ProductsCardList(
+                      userRole: context
+                                  .read<AppManagerBloc>()
+                                  .member
+                                  ?.userRole ==
+                              UserRoles.reviewer.name
+                          ? UserRoles.reviewer
+                          : context.read<AppManagerBloc>().member?.userRole ==
+                                  UserRoles.entrepreneur.name
+                              ? UserRoles.entrepreneur
+                              : UserRoles.admin,
+                      products: _products),
                 ),
               ],
             ),

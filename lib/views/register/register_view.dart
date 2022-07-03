@@ -7,7 +7,6 @@ import 'package:matching_reviewer/models/product_expertise/product_expertise.dar
 import 'package:matching_reviewer/views/register/bloc/register_bloc.dart';
 import 'package:matching_reviewer/views/register/general_info_view.dart';
 import 'package:matching_reviewer/views/register/product_expertise_view.dart';
-import 'package:matching_reviewer/views/views.dart';
 
 import '../../blocs/blocs.dart';
 import 'entrepreneur_view.dart';
@@ -15,9 +14,12 @@ import 'entrepreneur_view.dart';
 class RegisterView extends StatelessWidget {
   final _key = GlobalKey<FormState>();
   final bool isReviewer;
+  User _userInfo = User();
+
   ProductExpertise _productExpertise = ProductExpertise(
       food: Food(), cosmetic: Cosmetic(), cloth: Cloth(), service: Service());
-  User _userInfo = User();
+
+
 
   RegisterView({Key? key, this.isReviewer = false}) : super(key: key);
 
@@ -31,8 +33,6 @@ class RegisterView extends StatelessWidget {
 
     onUpdateUserInfo(User userInfo) {
       _userInfo = userInfo;
-      debugPrint('firstname -> ${_userInfo.firstName}');
-      debugPrint('sex -> ${_userInfo.sex}');
     }
 
     return BlocBuilder<AppManagerBloc, AppManagerState>(
@@ -113,8 +113,10 @@ class RegisterView extends StatelessWidget {
                 GeneralInfoView(
                   userInfo: userInfo,
                   onUpdateUserInfo: onUpdateUserInfo,
+                  isReviewer: false,
                 ),
-                EntrepreneurView(),
+                EntrepreneurView(
+                    userInfo: _userInfo, onUpdateUserInfo: onUpdateUserInfo),
               ],
             ),
             ProductExpertiseView(
@@ -174,7 +176,9 @@ class RegisterView extends StatelessWidget {
         Row(
           children: [
             GeneralInfoView(
-                userInfo: userInfo, onUpdateUserInfo: onUpdateUserInfo),
+                userInfo: userInfo,
+                onUpdateUserInfo: onUpdateUserInfo,
+                isReviewer: true),
             ProductExpertiseView(
                 productExpertise: productExpertise,
                 onUpdateValue: onUpdateProductExpertise),

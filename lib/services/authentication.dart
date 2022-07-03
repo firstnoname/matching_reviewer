@@ -21,49 +21,49 @@ class Authentication {
   Authentication._(this._appManagerBloc)
       : _firebaseAuth = FirebaseAuth.instance;
 
-  Future<void> verifyPhoneNumber({
-    required String phoneNumber,
-    required PhoneVerificationCompleted verificationCompleted,
-    required PhoneVerificationFailed verificationFailed,
-    required PhoneCodeSent codeSent,
-    required PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout,
-    int? resendToken,
-  }) {
-    return _firebaseAuth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: verificationCompleted,
-      verificationFailed: verificationFailed,
-      codeSent: codeSent,
-      codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
-      forceResendingToken: resendToken,
-    );
-  }
-
-  bool isLoggedIn() {
-    return _firebaseAuth.currentUser != null;
-  }
+  // Future<void> verifyPhoneNumber({
+  //   required String phoneNumber,
+  //   required PhoneVerificationCompleted verificationCompleted,
+  //   required PhoneVerificationFailed verificationFailed,
+  //   required PhoneCodeSent codeSent,
+  //   required PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout,
+  //   int? resendToken,
+  // }) {
+  //   return _firebaseAuth.verifyPhoneNumber(
+  //     phoneNumber: phoneNumber,
+  //     verificationCompleted: verificationCompleted,
+  //     verificationFailed: verificationFailed,
+  //     codeSent: codeSent,
+  //     codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+  //     forceResendingToken: resendToken,
+  //   );
+  // }
+  //
+  // bool isLoggedIn() {
+  //   return _firebaseAuth.currentUser != null;
+  // }
 
   Future<void> signOut() => _firebaseAuth
       .signOut()
       .then((_) => debugPrint('Log out succeeded'))
       .catchError((e) => debugPrint('Error occurred: ${e.toString()}'));
 
-  Future<void> signInWithPhoneNumber(
-    String verificationId,
-    String smsCode,
-  ) async {
-    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: smsCode,
-    );
-
-    await signInWithCredential(phoneAuthCredential);
-  }
-
-  Future<void> signInWithCredential(AuthCredential credential) async {
-    await _firebaseAuth.signInWithCredential(credential);
-    await checkCurrentUserProfile();
-  }
+  // Future<void> signInWithPhoneNumber(
+  //   String verificationId,
+  //   String smsCode,
+  // ) async {
+  //   PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+  //     verificationId: verificationId,
+  //     smsCode: smsCode,
+  //   );
+  //
+  //   await signInWithCredential(phoneAuthCredential);
+  // }
+  //
+  // Future<void> signInWithCredential(AuthCredential credential) async {
+  //   await _firebaseAuth.signInWithCredential(credential);
+  //   await checkCurrentUserProfile();
+  // }
 
   checkCurrentUserProfile() async {
     var user = await UserAPI().getUserInfo(_firebaseAuth.currentUser!.uid);

@@ -1,4 +1,3 @@
-import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,7 @@ class ReviewerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User _reviewer = context.read<AppManagerBloc>().member;
+    User _reviewer = context.read<AppManagerBloc>().member!;
 
     return Column(
       children: [
@@ -39,6 +38,13 @@ class ReviewerView extends StatelessWidget {
                       ),
                       Expanded(
                         child: ProductsCardList(
+                            userRole:
+                                _reviewer.userRole == UserRoles.reviewer.name
+                                    ? UserRoles.reviewer
+                                    : _reviewer.userRole ==
+                                            UserRoles.entrepreneur.name
+                                        ? UserRoles.entrepreneur
+                                        : UserRoles.admin,
                             products: _products,
                             onUploadReviewForm: (FilePickerResult pickedFile,
                                 String matchingID) async {

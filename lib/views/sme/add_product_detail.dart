@@ -285,7 +285,7 @@ class _AddProductDetailState extends State<AddProductDetail> {
       child: ElevatedButton(
         child: const Text("Submit"),
         onPressed: () {
-          User userInfo = BlocProvider.of<AppManagerBloc>(context).member;
+          User userInfo = BlocProvider.of<AppManagerBloc>(context).member!;
           context.read<SmeViewBloc>().add(SmeViewEventSubmitProduct(
               entrepreneur: userInfo,
               category: _category,

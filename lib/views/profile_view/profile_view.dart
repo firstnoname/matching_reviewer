@@ -11,7 +11,7 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User _userInfo = context.read<AppManagerBloc>().member;
+    User _userInfo = context.read<AppManagerBloc>().member!;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),

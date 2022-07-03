@@ -4,14 +4,13 @@ import 'package:matching_reviewer/blocs/app_manager/bloc/app_manager_bloc.dart';
 import 'package:matching_reviewer/views/views.dart';
 
 import '../../models/models.dart';
-import '../../widgets/widgets.dart';
 
 class Index extends StatelessWidget {
   const Index({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    User _userInfo = context.read<AppManagerBloc>().member;
+    User _userInfo = context.read<AppManagerBloc>().member!;
     return Scaffold(
         appBar: AppBar(
           actions: [

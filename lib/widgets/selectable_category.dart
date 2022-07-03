@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:matching_reviewer/widgets/widgets.dart';
 
+import '../models/models.dart';
+
 class SelectableCategory extends StatefulWidget {
   final Function onSelectCategory;
   final bool isForMatchingView;
+  final List<Matching>? matchingData;
 
   const SelectableCategory(
       {Key? key,
       required this.onSelectCategory,
-      this.isForMatchingView = false})
+      this.isForMatchingView = false,
+      this.matchingData})
       : super(key: key);
 
   factory SelectableCategory.forMatchingView(
@@ -59,10 +63,9 @@ class _SelectableCategoryState extends State<SelectableCategory> {
 
   @override
   Widget build(BuildContext context) {
-    return _defaultBuilder();
-    // return widget.isForMatchingView == true
-    //     ? _matchingViewBuilder()
-    //     : _defaultBuilder();
+    return widget.isForMatchingView == true
+        ? _defaultBuilder()
+        : _defaultBuilder();
   }
 
   Column _matchingViewBuilder() {

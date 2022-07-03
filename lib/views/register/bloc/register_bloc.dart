@@ -32,22 +32,18 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   Future<FutureOr<void>> _onSubmittedForm(
       RegisterEventSubmittedForm event, Emitter<RegisterState> emit) async {
     final _path = "profile_users/${event.userInfo.id}";
+    String? _uploadedProfilePath;
 
     if (_imageBytes != null) {
-      String? _uploadedProfilePath =
-          await ImageApi().uploadImage(_imageBytes!, _path);
+      _uploadedProfilePath = await ImageApi().uploadImage(_imageBytes!, _path);
+      event.userInfo.imageProfilePath = _uploadedProfilePath;
+    }
 
-      if (_uploadedProfilePath.isNotEmpty) {
-        event.userInfo.imageProfilePath = _uploadedProfilePath;
-        event.userInfo.userRole =
-            isReviewer == true ? 'reviewer' : 'entrepreneur';
-        bool _isUserInfoSuccess =
-            await UserAPI().addUser(userInfo: event.userInfo);
-        if (_isUserInfoSuccess) {
-          appManagerBloc.updateCurrentUserProfile(member: event.userInfo);
-          emit(RegisterStateSucceed());
-        }
-      }
+    event.userInfo.userRole = isReviewer == true ? 'reviewer' : 'entrepreneur';
+    bool _isUserInfoSuccess = await UserAPI().addUser(userInfo: event.userInfo);
+    if (_isUserInfoSuccess) {
+      appManagerBloc.updateCurrentUserProfile(member: event.userInfo);
+      emit(RegisterStateSucceed());
     }
 
     emit(RegisterStateFailure(

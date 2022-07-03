@@ -38,6 +38,7 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
   FutureOr<void> _onInit(
       MatchingEventInit event, Emitter<MatchingState> emit) async {
     _products = await MatchingAPI().getMatchingList();
+    emit(MatchingStateGetProductSuccess(matchingList: _products));
   }
 
   Future<FutureOr<void>> _onSelectedRole(
@@ -65,8 +66,8 @@ class MatchingBloc extends Bloc<MatchingEvent, MatchingState> {
     List<User> _users = [];
     _users = await UserAPI().getUsers(
         userRole: UserRoles.reviewer.name,
-        category: selectedCategory,
-        subCategory: selectedSubCategory);
+        category: event.matching.productExpertiseCategory,
+        subCategory: event.matching.productExpertiseSubCategory);
 
     debugPrint('user for options two -> ${_users.length}');
 

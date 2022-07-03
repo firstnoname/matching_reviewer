@@ -20,6 +20,8 @@ class User {
   String? userRole;
   String? sex;
   String? occupation;
+  String? orgSize;
+  String? orgType;
   ProductExpertise? productExpertise;
 
   User({
@@ -36,6 +38,8 @@ class User {
     this.userRole,
     this.sex,
     this.occupation,
+    this.orgSize,
+    this.orgType,
     this.productExpertise,
   });
 
@@ -54,6 +58,8 @@ class User {
       'userRole': userRole,
       'sex': sex,
       'occupation': occupation,
+      'organizationSize': orgSize,
+      'organizationType': orgType,
       'productExpertise': productExpertise?.toMap(),
     };
   }
@@ -75,6 +81,8 @@ class User {
       userRole: map['userRole'],
       sex: map['sex'],
       occupation: map['occupation'],
+      orgSize: map['organizationSize'],
+      orgType: map['organizationType'],
       productExpertise: map['productExpertise'] != null
           ? ProductExpertise.fromMap(map['productExpertise'])
           : null,

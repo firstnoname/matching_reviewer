@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:matching_reviewer/models/models.dart';
 
@@ -67,6 +68,19 @@ class MatchingAPI extends BasedAPI {
     return matchingInfo;
   }
 
+  Future<bool> updateMatchingStatus({required Matching matchingInfo}) async {
+    bool isUpdateSuccess = true;
+
+    await collection
+        .doc(matchingInfo.id)
+        .update(matchingInfo.toMap())
+        .catchError((error) {
+      isUpdateSuccess = false;
+    });
+
+    return isUpdateSuccess;
+  }
+
   Future<bool> updateMatchingInfo({required Matching matchingInfo}) async {
     bool isUpdateSuccess = true;
     await collection.doc(matchingInfo.id).update(
@@ -88,10 +102,16 @@ class MatchingAPI extends BasedAPI {
     return isUpdateSuccess;
   }
 
-  Future<List<Matching>> getMatchingList() async {
-    var response = await collection.get();
+  Future<List<Matching>> getMatchingList({bool isReviewerNull = true}) async {
+    QuerySnapshot<Map<String, dynamic>>? response;
+    if (isReviewerNull) {
+      response =
+          await collection.where('reviewer', isNull: isReviewerNull).get();
+    } else if (isReviewerNull == false) {
+      response = await collection.get();
+    }
 
-    return response.docs
+    return response!.docs
         .map((e) => Matching.fromMap(e.data()..addAll({'id': e.id})))
         .toList();
   }

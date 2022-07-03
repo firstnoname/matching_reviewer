@@ -1,5 +1,7 @@
 import 'package:matching_reviewer/models/models.dart';
 
+enum MatchingCaseStatus { enable, disable }
+
 class Matching {
   String? id;
   final User? entrepreneur;
@@ -8,6 +10,7 @@ class Matching {
   final String? productExpertiseSubCategory;
   Product? product;
   final Payment? payment;
+  MatchingCaseStatus? status;
 
   Matching(
       {this.id,
@@ -16,7 +19,8 @@ class Matching {
       this.productExpertiseCategory,
       this.productExpertiseSubCategory,
       this.product,
-      this.payment});
+      this.payment,
+      this.status});
 
   Map<String, dynamic> toMap() {
     return {
@@ -26,6 +30,11 @@ class Matching {
       'productExpertiseSubCategory': productExpertiseSubCategory,
       'product': product?.toMap(),
       'payment': payment?.toMap(),
+      'status': status == null
+          ? MatchingCaseStatus.enable.name
+          : status == MatchingCaseStatus.enable
+              ? MatchingCaseStatus.enable
+              : MatchingCaseStatus.disable.name,
     };
   }
 
@@ -40,6 +49,9 @@ class Matching {
       productExpertiseSubCategory: map['productExpertiseSubCategory'] ?? '',
       product: map['product'] != null ? Product.fromMap(map['product']) : null,
       payment: map['payment'] != null ? Payment.fromMap(map['payment']) : null,
+      status: map['status'] == MatchingCaseStatus.enable.name
+          ? MatchingCaseStatus.enable
+          : MatchingCaseStatus.disable,
     );
   }
 }

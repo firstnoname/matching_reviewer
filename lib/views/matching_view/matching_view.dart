@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:matching_reviewer/models/models.dart';
 import 'package:matching_reviewer/views/matching_view/bloc/matching_bloc.dart';
 
@@ -16,20 +17,23 @@ class MatchingView extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: BlocProvider(
-          create: (context) => MatchingBloc(),
+          create: (context) => MatchingBloc()..add(MatchingEventInit()),
           child: BlocBuilder<MatchingBloc, MatchingState>(
             builder: (context, state) {
-              if (state is MatchingInitial) {
-                return _buildSelectCategory(context);
+              if (state is MatchingStateGetProductSuccess) {
+                return _listBuilderOptionOne(
+                    context: context, products: state.matchingList);
               } else if (state is MatchingSelectRoleSuccess) {
                 return _selectCategory(context);
               } else if (state is MatchingStateGetOptionsOneSuccess) {
-                return _listBuilderOptionOne(products: state.products);
+                return _listBuilderOptionOne(
+                    context: context, products: state.products);
               } else if (state is MatchingStateSelectOptionOneSuccess) {
                 return _listBuilderOptionTwo(context, users: state.userList);
               } else if (state is MatchingStateApproveSuccess) {
                 Navigator.pop(context);
-                return _listBuilderOptionOne(products: state.products);
+                return _listBuilderOptionOne(
+                    context: context, products: state.products);
               } else {
                 return Container();
               }
@@ -52,9 +56,6 @@ class MatchingView extends StatelessWidget {
               onPressed: () => context.read<MatchingBloc>().add(
                   MatchingEventSelectedRole(
                       selectedRole: UserRoles.entrepreneur)),
-              // onPressed: () => context
-              //     .read<MatchingBloc>()
-              //     .add(MatchingEventSelectRole(isReviewer: false)),
             ),
             const SizedBox(width: 16),
             ElevatedButton(
@@ -74,10 +75,11 @@ class MatchingView extends StatelessWidget {
     //         .read<MatchingBloc>()
     //         .add(MatchingSelectedCategory(
     //             selectedCategory: category, selectedSubCategory: subCategory)));
-    return SelectableCategory.forMatchingView(onSelectCategory: (String category, String subCategory) => context
+    return SelectableCategory.forMatchingView(
+        onSelectCategory: (String category, String subCategory) => context
             .read<MatchingBloc>()
-        .add(MatchingSelectedCategory(
-        selectedCategory: category, selectedSubCategory: subCategory)));
+            .add(MatchingSelectedCategory(
+                selectedCategory: category, selectedSubCategory: subCategory)));
   }
 
   Widget _selectCategory(BuildContext context) {
@@ -247,23 +249,29 @@ class MatchingView extends StatelessWidget {
     );
   }
 
-  Widget _listBuilderOptionOne({required List<Matching> products}) {
+  Widget _listBuilderOptionOne(
+      {required BuildContext context, required List<Matching> products}) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text('Select Entrepreneur'),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: products.length,
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () => context
-                .read<MatchingBloc>()
-                .add(MatchingEventSelectOptionOne(matching: products[index])),
-            child: UserCardWidget(matchingInfo: products[index]),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Select Entrepreneur',
+            style:
+                TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04),
           ),
         ),
+        products.isNotEmpty
+            ? ListView.builder(
+                shrinkWrap: true,
+                itemCount: products.length,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () => context.read<MatchingBloc>().add(
+                      MatchingEventSelectOptionOne(matching: products[index])),
+                  child: UserCardWidget(matchingInfo: products[index]),
+                ),
+              )
+            : _noData(context),
       ],
     );
   }
@@ -272,24 +280,50 @@ class MatchingView extends StatelessWidget {
       {required List<User> users}) {
     return Column(
       children: [
-        const Text('Select reviewer'),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: users.length,
-          itemBuilder: (ctx, index) => GestureDetector(
-            onTap: () {
-              context
-                  .read<MatchingBloc>()
-                  .add(MatchingEventSelectOptionTwo(optionTwo: users[index]));
-              _showMyDialog(context,
-                  approveFunc: () => context
-                      .read<MatchingBloc>()
-                      .add(MatchingEventApproved()));
-            },
-            child: UserCardWidget(userInfo: users[index]),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            'Select reviewer',
+            style:
+                TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04),
           ),
         ),
+        users.isNotEmpty
+            ? ListView.builder(
+                shrinkWrap: true,
+                itemCount: users.length,
+                itemBuilder: (ctx, index) => GestureDetector(
+                  onTap: () {
+                    context.read<MatchingBloc>().add(
+                        MatchingEventSelectOptionTwo(optionTwo: users[index]));
+                    _showMyDialog(context,
+                        approveFunc: () => context
+                            .read<MatchingBloc>()
+                            .add(MatchingEventApproved()));
+                  },
+                  child: UserCardWidget(userInfo: users[index]),
+                ),
+              )
+            : _noData(context),
       ],
+    );
+  }
+
+  Widget _noData(BuildContext context) {
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+          SvgPicture.asset(
+            'assets/images/info.svg',
+            color: Colors.yellow,
+            height: MediaQuery.of(context).size.height * 0.06,
+            width: MediaQuery.of(context).size.height * 0.06,
+          ),
+          const SizedBox(height: 8),
+          const Text('No data'),
+        ],
+      ),
     );
   }
 
